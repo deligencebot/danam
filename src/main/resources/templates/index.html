@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,8 +9,14 @@
       integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
       crossorigin="anonymous"
     ></script>
+    <link rel="stylesheet" href="text/css" th:href="@{/bootstrap.min.css}" />
   </head>
   <body>
-    <a href="/member/join">회원가입</a>
+    <div class="container my-3">
+      session 값 확인:
+      <p th:text="${session.loginSeq}"></p>
+      <a href="/member/login">로그인</a>
+      <a href="/member/join">회원가입</a>
+    </div>
   </body>
 </html>

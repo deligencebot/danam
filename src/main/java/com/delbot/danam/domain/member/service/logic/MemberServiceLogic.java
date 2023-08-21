@@ -1,40 +1,32 @@
 package com.delbot.danam.domain.member.service.logic;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.delbot.danam.domain.member.dto.MemberDTO;
-import com.delbot.danam.domain.member.entity.MemberEntity;
+import com.delbot.danam.domain.member.entity.Member;
 import com.delbot.danam.domain.member.repository.MemberRepository;
 import com.delbot.danam.domain.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberServiceLogic implements MemberService{
-
+  //
   private final MemberRepository memberRepository;
-  // private final ModelMapper mapper;
+  private final ModelMapper mapper;
+  private final PasswordEncoder passwordEncoder;
 
   @Override
-  public void join(MemberDTO memberDTO) {
-    //
-    MemberEntity memberEntity = MemberEntity.builder()
-    .memberId(memberDTO.getMemberId())
-    .memberPassword(memberDTO.getMemberPassword())
-    .memberName(memberDTO.getMemberName())
-    .memberNick(memberDTO.getMemberNick())
-    .memberType(memberDTO.getMemberType())
-    .memberGender(memberDTO.getMemberGender())
-    .memberBirthDay(memberDTO.getMemberBirthDay())
-    .memberPhone(memberDTO.getMemberPhone())
-    .memberAddress(memberDTO.getMemberAddress())
-    .memberEmail(memberDTO.getMemberEmail())
-    .build();
-    memberRepository.save(memberEntity);
+  public void join(MemberDTO memberDTO) { 
+    memberRepository.save(Member.dtoToEntity(memberDTO, passwordEncoder.encode(memberDTO.getPassword()))); 
   }
 
   @Override
@@ -44,15 +36,15 @@ public class MemberServiceLogic implements MemberService{
   }
 
   @Override
-  public MemberDTO findMemberBySeq(Long seq) {
+  public MemberDTO findMemberById(Long id) {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findMemberBySeq'");
+    throw new UnsupportedOperationException("Unimplemented method 'findMemberById'");
   }
 
   @Override
-  public MemberDTO findMemberById(String id) {
+  public MemberDTO findMemberByUsername(String username) {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findMemberById'");
+    throw new UnsupportedOperationException("Unimplemented method 'findMemberByUsername'");
   }
 
   @Override
@@ -68,20 +60,14 @@ public class MemberServiceLogic implements MemberService{
   }
 
   @Override
-  public void delete(Long seq) {
+  public void delete(Long id) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'delete'");
   }
 
   @Override
-  public MemberDTO login(MemberDTO memberDTO) {
+  public String usernameDuplicationCheck(String username) {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'login'");
-  }
-
-  @Override
-  public String idDuplicationCheck(String id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'idDuplicationCheck'");
+    throw new UnsupportedOperationException("Unimplemented method 'usernameDuplicationCheck'");
   }
 }

@@ -17,18 +17,18 @@ import lombok.ToString;
 @AllArgsConstructor
 public class MemberJoinForm {
   //
-  private String memberId;
-  private String memberPassword;
-  private String memberName;
-  private String memberNick;
-  private String memberGender;
+  private String username;
+  private String password;
+  private String name;
+  private String nickname;
+  private String Gender;
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDate memberBirthDay;
-  private String memberPhoneArea;
-  private String memberPhoneFront;
-  private String memberPhoneBack;
-  private String memberZipCode;
-  private String memberAddress;
-  private String memberEmailLocal;
-  private String memberEmailDomain;
+  private LocalDate birthDay;
+  private String phoneArea;
+  private String phoneFront;
+  private String phoneBack;
+  private String zipCode;
+  private String address;
+  private String emailLocal;
+  private String emailDomain;
 }

@@ -8,11 +8,10 @@ public interface MemberService {
   
   void join(MemberDTO memberDTO);
   List<MemberDTO> findAll();
-  MemberDTO findMemberBySeq(Long seq);
-  MemberDTO findMemberById(String id);
+  MemberDTO findMemberById(Long id);
+  MemberDTO findMemberByUsername(String username);
   MemberDTO findMemberByName(String name);
   MemberDTO update(MemberDTO memberDTO);
-  void delete(Long seq);
-  MemberDTO login(MemberDTO memberDTO);
-  String idDuplicationCheck(String id);
+  void delete(Long id);
+  String usernameDuplicationCheck(String username);
 }

@@ -29,6 +29,8 @@ dependencies {
 	runtimeOnly("com.mysql:mysql-connector-j")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE")
 	// https://mvnrepository.com/artifact/org.modelmapper/modelmapper
 	implementation("org.modelmapper:modelmapper:3.1.1")
 }
