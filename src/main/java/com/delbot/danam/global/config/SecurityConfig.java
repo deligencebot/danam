@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,20 +16,30 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
   //
   @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return web -> {
+      web.ignoring().antMatchers("/js/**", "/css/**", "/images/**", "/bootstrap.min.css", "/bootstrap.min.js");
+    };
+  }
+  @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     //
-    return http.csrf().disable()
+    return http
+    .csrf().disable()
     .authorizeRequests()
-      .antMatchers("/", "/member/join", "/member/login")
-      .permitAll()
+      .antMatchers("/", "/member/join", "/member/login").permitAll()
+      .anyRequest().authenticated()
       .and()
     .formLogin()
-      .loginPage("/member/login")
+      .loginPage("/member/login").permitAll()
       .defaultSuccessUrl("/")
-      .permitAll()
       .and()
     .logout()
-      .permitAll()
+      .logoutUrl("/member/logout")
+      .logoutSuccessUrl("/")
+      .invalidateHttpSession(true)
+      .deleteCookies("JSESSIONID")
+      .clearAuthentication(true)
       .and()
     .build();
   }

@@ -14,10 +14,8 @@ import javax.persistence.Table;
 
 import com.delbot.danam.domain.BaseEntity;
 import com.delbot.danam.domain.member.dto.MemberDTO;
-import com.delbot.danam.domain.member.vo.Address;
 import com.delbot.danam.domain.member.vo.Gender;
 import com.delbot.danam.domain.member.vo.MemberRole;
-import com.delbot.danam.domain.member.vo.PhoneNumber;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -58,18 +56,16 @@ public class Member extends BaseEntity{
   private LocalDate birthDay;
 
   @Column(nullable = false)
-  @Embedded
-  private PhoneNumber phoneNumbere;
+  private String phoneNumber;
 
   @Column(nullable = false)
-  @Embedded
-  private Address address;
+  private String address;
 
   @Column(length = 50, nullable = false)
   private String email;
 
   @Builder
-  public Member(Long id, String username, String password, String name, String nickname, MemberRole role, Gender gender, LocalDate birthDay, PhoneNumber phoneNumbere, Address address, String email) {
+  public Member(Long id, String username, String password, String name, String nickname, MemberRole role, Gender gender, LocalDate birthDay, String phoneNumber, String address, String email) {
     //
     this.id = id;
     this.username = username;
@@ -79,7 +75,7 @@ public class Member extends BaseEntity{
     this.role = role;
     this.gender = gender;
     this.birthDay = birthDay;
-    this.phoneNumbere = phoneNumbere;
+    this.phoneNumber = phoneNumber;
     this.address = address;
     this.email = email;
   }
@@ -94,7 +90,7 @@ public class Member extends BaseEntity{
     .role(memberDTO.getRole())
     .gender(memberDTO.getGender())
     .birthDay(memberDTO.getBirthDay())
-    .phoneNumbere(memberDTO.getPhoneNumber())
+    .phoneNumber(memberDTO.getPhoneNumber())
     .address(memberDTO.getAddress())
     .email(memberDTO.getEmail())
     .build();

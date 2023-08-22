@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>join</title>
-  </head>
-  <body>
+<html layout:decorate="~{layout}">
+  <div layout:fragment="content" class="container my-3">
     <form action="/member/join" method="post">
       <input type="text" name="username" placeholder="아이디" /> <br />
       <input type="password" name="password" placeholder="비밀번호" />
@@ -15,66 +9,23 @@
       <input type="text" name="name" placeholder="이름" /> <br />
       <input type="text" name="nickname" placeholder="닉네임" /> <br />
       성별 &nbsp; 남성
-      <input type="radio" name="gender" id="Male" value="Male" /> 여성
-      <input type="radio" name="gender" id="Female" value="Female" />
+      <input type="radio" name="gender" id="genderMale" value="Male" /> 여성
+      <input type="radio" name="gender" id="genderFemale" value="Female" />
       <br />
       생년월일
       <input type="date" name="birthDay" /> <br />
       전화번호
-      <select name="phoneArea" id="area-number">
-        <option value="">선택</option>
-        <option value="010">010</option>
-        <option value="02">02</option>
-        <option value="031">031</option>
-        <option value="032">032</option>
-        <option value="033">033</option>
-        <option value="041">041</option>
-        <option value="042">042</option>
-        <option value="043">043</option>
-        <option value="044">044</option>
-        <option value="051">051</option>
-        <option value="052">052</option>
-        <option value="053">053</option>
-        <option value="054">054</option>
-        <option value="055">055</option>
-        <option value="061">061</option>
-        <option value="062">062</option>
-        <option value="063">063</option>
-        <option value="064">064</option>
-        <option value="direct">직접입력</option>
-      </select>
       <input
-        type="text"
-        name="phoneAreaDirect"
-        id="area-number-direct"
-        placeholder="입력하세요"
+        type="number"
+        name="phoneNumber"
+        placeholder=" - 를 뺴고 입력하세요"
       />
-      <input
-        type="text"
-        name="phoneFront"
-        id="front-number"
-        placeholder="1234"
-      />
-      <input type="text" name="phoneBack" id="back-number" placeholder="5678" />
-      <br />
-      <input type="text" name="zipCode" id="zipcode" placeholder="우편번호" />
       <br />
       <input type="text" name="address" id="address" placeholder="주소" />
       <br />
-      <input type="text" name="emailLocal" id="local" placeholder="이메일" />
-      @
-      <select name="emailDomain" id="domain">
-        <option value="">선택</option>
-        <option value="naver.com">naver.com</option>
-        <option value="nate.com">nate.com</option>
-        <option value="hanmail.net">hanmail.net</option>
-        <option value="kakao.com">kakao.com</option>
-        <option value="gamil.com">gmail.com</option>
-        <option value="direct">직접입력</option>
-      </select>
-      <input type="text" name="emailDomainDirect" id="domain-direct" />
+      <input type="text" name="email" id="local" placeholder="이메일" />
       <br />
       <input type="submit" value="회원가입" />
     </form>
-  </body>
+  </div>
 </html>

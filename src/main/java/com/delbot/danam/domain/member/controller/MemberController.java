@@ -1,6 +1,6 @@
 package com.delbot.danam.domain.member.controller;
 
-import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,27 +25,14 @@ public class MemberController {
   public String joinForm() { return "join"; }
 
   @PostMapping("/join")
-  public String join(@ModelAttribute MemberJoinForm memberJoinForm) {
+  public String join(@Valid @ModelAttribute MemberJoinForm form) {
     //
-    MemberDTO memberDTO = MemberDTO.joinFormToDTO(memberJoinForm);
+    MemberDTO memberDTO = MemberDTO.formToDto(form);
     System.out.println("MemberDTO = " + memberDTO);
     memberService.join(memberDTO);
-    return "index";
+    return "redirect:/";
   }
 
   @GetMapping("/login")
   public String loginForm() { return "login"; }
-
-  // @PostMapping("/login")
-  // public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session) {
-  //   //
-  //   MemberDTO loginResult = memberService.login(memberDTO);
-
-  //   if (loginResult != null) {
-  //     session.setAttribute(("loginSeq"), loginResult);
-  //     return "index";
-  //   } else {
-  //     return "login";
-  //   }
-  // }
 }

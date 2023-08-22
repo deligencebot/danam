@@ -2,33 +2,43 @@ package com.delbot.danam.domain.member.dto;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
 public class MemberJoinForm {
   //
+  @Size(min = 6, max = 20)
+  @NotEmpty(message = "사용자 ID는 필수항목입니다.")
   private String username;
+  
+  @NotEmpty(message = "비밀번호는 필수항목입니다.")
   private String password;
+
+  @NotEmpty(message = "비밀번호확인은 필수항목입니다.")
+  private String passwordCheck;
+
+  @NotEmpty(message = "이름은 필수항목입니다.")
   private String name;
+
   private String nickname;
-  private String Gender;
+
+  private String gender;
+
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate birthDay;
-  private String phoneArea;
-  private String phoneFront;
-  private String phoneBack;
-  private String zipCode;
+
+  private String phoneNumber;
+
   private String address;
-  private String emailLocal;
-  private String emailDomain;
+
+  @Email(message = "이메일 형식이 아닙니다.")
+  private String email;
 }
