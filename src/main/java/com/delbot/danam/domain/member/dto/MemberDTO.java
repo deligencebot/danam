@@ -26,7 +26,6 @@ public class MemberDTO {
   private String nickname;
   private MemberRole role;
   private Gender gender;
-  private LocalDate birthDay;
   private String phoneNumber;
   private String address;
   private String email;
@@ -54,7 +53,6 @@ public class MemberDTO {
       memberDTO.setGender(Gender.Female);
     }
 
-    memberDTO.setBirthDay(form.getBirthDay());
     memberDTO.setPhoneNumber(form.getPhoneNumber());
     memberDTO.setAddress(form.getAddress());
     memberDTO.setEmail(form.getEmail());

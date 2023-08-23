@@ -1,9 +1,6 @@
 package com.delbot.danam.domain.member.entity;
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -53,9 +50,6 @@ public class Member extends BaseEntity{
   private Gender gender;
 
   @Column(nullable = false)
-  private LocalDate birthDay;
-
-  @Column(nullable = false)
   private String phoneNumber;
 
   @Column(nullable = false)
@@ -65,7 +59,7 @@ public class Member extends BaseEntity{
   private String email;
 
   @Builder
-  public Member(Long id, String username, String password, String name, String nickname, MemberRole role, Gender gender, LocalDate birthDay, String phoneNumber, String address, String email) {
+  public Member(Long id, String username, String password, String name, String nickname, MemberRole role, Gender gender, String phoneNumber, String address, String email) {
     //
     this.id = id;
     this.username = username;
@@ -74,7 +68,6 @@ public class Member extends BaseEntity{
     this.nickname = nickname;
     this.role = role;
     this.gender = gender;
-    this.birthDay = birthDay;
     this.phoneNumber = phoneNumber;
     this.address = address;
     this.email = email;
@@ -89,7 +82,6 @@ public class Member extends BaseEntity{
     .nickname(memberDTO.getNickname())
     .role(memberDTO.getRole())
     .gender(memberDTO.getGender())
-    .birthDay(memberDTO.getBirthDay())
     .phoneNumber(memberDTO.getPhoneNumber())
     .address(memberDTO.getAddress())
     .email(memberDTO.getEmail())
