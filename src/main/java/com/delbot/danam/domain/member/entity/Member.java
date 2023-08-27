@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.delbot.danam.domain.BaseEntity;
 import com.delbot.danam.domain.member.dto.MemberDTO;
 import com.delbot.danam.domain.member.vo.Gender;
 import com.delbot.danam.domain.member.vo.MemberRole;
@@ -23,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "tb_member")
-public class Member extends BaseEntity{
+public class Member extends com.delbot.danam.domain.Entity{
   //
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package com.delbot.danam.domain.member.service.logic;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.delbot.danam.domain.member.dto.MemberDTO;
 import com.delbot.danam.domain.member.entity.Member;
+import com.delbot.danam.domain.member.exception.NoSuchIdException;
 import com.delbot.danam.domain.member.repository.MemberRepository;
 import com.delbot.danam.domain.member.service.MemberService;
 
@@ -36,14 +38,26 @@ public class MemberServiceLogic implements MemberService{
 
   @Override
   public MemberDTO findMemberById(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findMemberById'");
+    //
+    Optional<Member> foundMember = memberRepository.findById(id);
+
+    if (!foundMember.isPresent()) {
+      throw new NoSuchIdException(String.format("Member(%s) is not found"));
+    }
+
+    return mapper.map(foundMember.get(), MemberDTO.class);
   }
 
   @Override
   public MemberDTO findMemberByUsername(String username) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findMemberByUsername'");
+    //
+    Optional<Member> foundMember = memberRepository.findByUsername(username);
+
+    if (!foundMember.isPresent()) {
+      throw new NoSuchIdException(String.format("Member(%s) is not found"));
+    }
+
+    return mapper.map(foundMember.get(), MemberDTO.class);
   }
 
   @Override
@@ -66,7 +80,25 @@ public class MemberServiceLogic implements MemberService{
 
   @Override
   public String usernameDuplicationCheck(String username) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'usernameDuplicationCheck'");
+    //
+    Optional<Member> foundMember = memberRepository.findByUsername(username);
+
+    if(foundMember.isPresent()) {
+      return "Duplication";
+    } else {
+      return "OK";
+    }
+  }
+
+  @Override
+  public String updateCheck(Long id, String password) {
+    //
+    Optional<Member> foundMember = memberRepository.findById(id);
+
+    if(passwordEncoder.matches(password, foundMember.get().getPassword())) {
+          return "OK";
+    } else {
+          return "DIFF";
+    }
   }
 }

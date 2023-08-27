@@ -14,4 +14,5 @@ public interface MemberService {
   MemberDTO update(MemberDTO memberDTO);
   void delete(Long id);
   String usernameDuplicationCheck(String username);
+  String updateCheck(Long id, String password);
 }

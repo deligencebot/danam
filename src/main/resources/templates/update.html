@@ -1,0 +1,105 @@
+<!-- templates/layout.html -->
+<html layout:decorate="~{layout}">
+  <!-- templates/update.html -->
+  <div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+      <div>
+        <h4>회원정보수정</h4>
+      </div>
+      <div class="validation-form" novalidate>
+        <form
+          th:action="@{/member/join}"
+          th:object="${memberJoinForm}"
+          method="post"
+        >
+          <div class="mb-3">
+            <label for="prePassword" class="form-label">이전 비밀번호</label>
+            <input
+              type="password"
+              th:field="*{prePassword}"
+              class="form-control"
+            />
+            <p
+              class="text-danger"
+              th:if="${#fields.hasErrors('prePassword')}"
+              th:errors="*{prePassword}"
+            ></p>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">새 비밀번호</label>
+            <input
+              type="password"
+              th:field="*{password}"
+              class="form-control"
+            />
+            <p
+              class="text-danger"
+              th:if="${#fields.hasErrors('password')}"
+              th:errors="*{password}"
+            ></p>
+          </div>
+          <div class="mb-3">
+            <label for="passwordCheck" class="form-label">비밀번호확인</label>
+            <input
+              type="password"
+              th:field="*{passwordCheck}"
+              class="form-control"
+            />
+            <p
+              class="text-danger"
+              th:if="${#fields.hasErrors('passwordCheck')}"
+              th:errors="*{passwordCheck}"
+            ></p>
+          </div>
+          <div class="mb-3">
+            <label for="nickname" class="form-label">닉네임</label>
+            <input type="text" th:field="*{nickname}" class="form-control" />
+            <p
+              class="text-danger"
+              th:if="${#fields.hasErrors('nickname')}"
+              th:errors="*{nickname}"
+            ></p>
+          </div>
+          <div class="mb-3">
+            <label for="phoneNumber" class="form-label">전화번호</label>
+            <input
+              type="text"
+              th:field="*{phoneNumber}"
+              class="form-control"
+              placeholder="-를 빼고 입력하세요"
+            />
+            <p
+              class="text-danger"
+              th:if="${#fields.hasErrors('phoneNumber')}"
+              th:errors="*{phoneNumber}"
+            ></p>
+          </div>
+          <div class="mb-3">
+            <label for="address" class="form-label">주소</label>
+            <input type="text" th:field="*{address}" class="form-control" />
+            <p
+              class="text-danger"
+              th:if="${#fields.hasErrors('address')}"
+              th:errors="*{address}"
+            ></p>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">이메일</label>
+            <input
+              type="text"
+              th:field="*{email}"
+              class="form-control"
+              placeholder="-를 빼고 입력하세요"
+            />
+            <p
+              class="text-danger"
+              th:if="${#fields.hasErrors('email')}"
+              th:errors="*{email}"
+            ></p>
+          </div>
+          <button type="submit" class="btn btn-primary">회원정보수정</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</html>

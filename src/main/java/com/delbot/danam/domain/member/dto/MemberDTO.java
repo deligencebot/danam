@@ -32,7 +32,7 @@ public class MemberDTO {
   private LocalDateTime createdTime;
   private LocalDateTime updatedTime;
 
-  public static MemberDTO formToDto(MemberJoinForm form) {
+  public static MemberDTO joinFormToDTO(MemberJoinForm form) {
     //
     MemberDTO memberDTO = new MemberDTO();
     memberDTO.setUsername(form.getUsername());
@@ -53,6 +53,18 @@ public class MemberDTO {
       memberDTO.setGender(Gender.Female);
     }
 
+    memberDTO.setPhoneNumber(form.getPhoneNumber());
+    memberDTO.setAddress(form.getAddress());
+    memberDTO.setEmail(form.getEmail());
+
+    return memberDTO;
+  }
+
+  public static MemberDTO updateFormToDTO(MemberUpdateForm form) {
+    //
+    MemberDTO memberDTO = new MemberDTO();
+    memberDTO.setPassword(form.getPassword());
+    memberDTO.setNickname(form.getNickname());
     memberDTO.setPhoneNumber(form.getPhoneNumber());
     memberDTO.setAddress(form.getAddress());
     memberDTO.setEmail(form.getEmail());
