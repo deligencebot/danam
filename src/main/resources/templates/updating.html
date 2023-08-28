@@ -8,12 +8,12 @@
       </div>
       <div class="validation-form" novalidate>
         <form
-          th:action="@{/member/join}"
-          th:object="${memberJoinForm}"
-          method="post"
+          th:action="@{|/member/detail/api/${member.id}|}"
+          th:object="${memberUpdateForm}"
+          th:method="put"
         >
           <div class="mb-3">
-            <label for="prePassword" class="form-label">이전 비밀번호</label>
+            <label for="prePassword" class="form-label">기존 비밀번호</label>
             <input
               type="password"
               th:field="*{prePassword}"
@@ -53,7 +53,12 @@
           </div>
           <div class="mb-3">
             <label for="nickname" class="form-label">닉네임</label>
-            <input type="text" th:field="*{nickname}" class="form-control" />
+            <input
+              type="text"
+              th:field="*{nickname}"
+              class="form-control"
+              th:value="${member.nickname}"
+            />
             <p
               class="text-danger"
               th:if="${#fields.hasErrors('nickname')}"
@@ -66,7 +71,7 @@
               type="text"
               th:field="*{phoneNumber}"
               class="form-control"
-              placeholder="-를 빼고 입력하세요"
+              th:value="${member.phoneNumber}"
             />
             <p
               class="text-danger"
@@ -76,7 +81,12 @@
           </div>
           <div class="mb-3">
             <label for="address" class="form-label">주소</label>
-            <input type="text" th:field="*{address}" class="form-control" />
+            <input
+              type="text"
+              th:field="*{address}"
+              class="form-control"
+              th:value="${member.address}"
+            />
             <p
               class="text-danger"
               th:if="${#fields.hasErrors('address')}"
@@ -89,7 +99,7 @@
               type="text"
               th:field="*{email}"
               class="form-control"
-              placeholder="-를 빼고 입력하세요"
+              th:value="${member.email}"
             />
             <p
               class="text-danger"

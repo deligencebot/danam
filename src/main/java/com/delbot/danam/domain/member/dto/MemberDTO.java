@@ -1,6 +1,5 @@
 package com.delbot.danam.domain.member.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.delbot.danam.domain.member.vo.Gender;
@@ -60,9 +59,10 @@ public class MemberDTO {
     return memberDTO;
   }
 
-  public static MemberDTO updateFormToDTO(MemberUpdateForm form) {
+  public static MemberDTO updateFormToDTO(MemberUpdateForm form, Long id) {
     //
     MemberDTO memberDTO = new MemberDTO();
+    memberDTO.setId(id);
     memberDTO.setPassword(form.getPassword());
     memberDTO.setNickname(form.getNickname());
     memberDTO.setPhoneNumber(form.getPhoneNumber());

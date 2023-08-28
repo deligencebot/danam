@@ -22,3 +22,8 @@ spring:
 
   security:
     default-target-url: /
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true

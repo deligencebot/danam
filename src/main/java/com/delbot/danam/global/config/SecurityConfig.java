@@ -41,6 +41,13 @@ public class SecurityConfig {
       .deleteCookies("JSESSIONID")
       .clearAuthentication(true)
       .and()
+    .sessionManagement()
+      .maximumSessions(1)
+      .maxSessionsPreventsLogin(false)
+      .and()
+    .sessionFixation()
+      .changeSessionId()
+      .and()
     .build();
   }
 

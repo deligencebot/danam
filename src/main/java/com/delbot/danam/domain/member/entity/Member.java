@@ -24,10 +24,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_member")
 public class Member extends com.delbot.danam.domain.Entity{
   //
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-  
   @Column(unique = true, length = 20, nullable = false)
   private String username;
 
@@ -58,9 +54,8 @@ public class Member extends com.delbot.danam.domain.Entity{
   private String email;
 
   @Builder
-  public Member(Long id, String username, String password, String name, String nickname, MemberRole role, Gender gender, String phoneNumber, String address, String email) {
+  public Member(String username, String password, String name, String nickname, MemberRole role, Gender gender, String phoneNumber, String address, String email) {
     //
-    this.id = id;
     this.username = username;
     this.password = password;
     this.name = name;
@@ -85,5 +80,13 @@ public class Member extends com.delbot.danam.domain.Entity{
     .address(memberDTO.getAddress())
     .email(memberDTO.getEmail())
     .build();
+  }
+
+  public void update(String password, String nickname, String phoneNumber, String address, String email) {
+    this.password = password;
+    this.nickname = nickname;
+    this.phoneNumber = phoneNumber;
+    this.address = address;
+    this.email = email;
   }
 }

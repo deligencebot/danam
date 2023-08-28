@@ -11,7 +11,7 @@ public interface MemberService {
   MemberDTO findMemberById(Long id);
   MemberDTO findMemberByUsername(String username);
   MemberDTO findMemberByName(String name);
-  MemberDTO update(MemberDTO memberDTO);
+  void update(MemberDTO memberDTO);
   void delete(Long id);
   String usernameDuplicationCheck(String username);
   String updateCheck(Long id, String password);

@@ -67,9 +67,29 @@ public class MemberServiceLogic implements MemberService{
   }
 
   @Override
-  public MemberDTO update(MemberDTO memberDTO) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'update'");
+  public void update(MemberDTO memberDTO) {
+    //
+    String encodedPassword = passwordEncoder.encode(memberDTO.getPassword());
+    Member foundMember = memberRepository.findById(memberDTO.getId()).get();
+
+    if(memberDTO.getNickname().isBlank()) {
+      memberDTO.setNickname(foundMember.getNickname());
+    }
+
+    if(memberDTO.getPhoneNumber().isBlank()) {
+      memberDTO.setPhoneNumber(foundMember.getPhoneNumber());
+    }
+
+    if(memberDTO.getAddress().isBlank()) {
+      memberDTO.setAddress(foundMember.getAddress());
+    }
+
+    if(memberDTO.getEmail().isBlank()) {
+      memberDTO.setEmail(foundMember.getEmail());
+    }
+
+    foundMember.update(encodedPassword, memberDTO.getNickname(), memberDTO.getPhoneNumber(), memberDTO.getAddress(), memberDTO.getEmail());
+    memberRepository.save(foundMember);
   }
 
   @Override
@@ -96,9 +116,11 @@ public class MemberServiceLogic implements MemberService{
     Optional<Member> foundMember = memberRepository.findById(id);
 
     if(passwordEncoder.matches(password, foundMember.get().getPassword())) {
-          return "OK";
+      System.out.println("비밀번호 일치 : " + password);
+      return "OK";
     } else {
-          return "DIFF";
+      System.out.println("비밀번호 불일치 : " + password);
+      return "DIFF";
     }
   }
 }
