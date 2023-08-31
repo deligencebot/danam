@@ -73,7 +73,7 @@ public class MemberController {
     return "detail";
   }
 
-  @GetMapping("/detail/updating/{id}")
+  @GetMapping("/detail/api/{id}")
   public String updateForm(@PathVariable Long id, MemberUpdateForm memberUpdateForm, Model model, Authentication authentication) { 
     //
     String username = authentication.getName();
@@ -85,7 +85,7 @@ public class MemberController {
 
     MemberDTO memberDTO = memberService.findMemberById(id);
     model.addAttribute("member", memberDTO);
-    return "updating"; 
+    return "update"; 
   }
 
   @PutMapping("/detail/api/{id}")
@@ -96,22 +96,22 @@ public class MemberController {
 
     if(bindingResult.hasErrors()) {
       System.out.println("bindingResult = " + bindingResult.getAllErrors());
-      return "updating";
+      return "update";
     }
 
     if(!memberService.updateCheck(id, memberUpdateForm.getPrePassword()).equals("OK")) {
       bindingResult.rejectValue("prePassword", "prePasswordIncorrect", "이전 비밀번호와 일치하지 않습니다.");
-      return "updating";
+      return "update";
     }
 
     if(memberUpdateForm.getPassword().equals(memberUpdateForm.getPrePassword())) {
       bindingResult.rejectValue("password", "passwordIncorrect", "이전 비밀번호와 다른 비밀번호를 설정해주십시오.");
-      return "updating";
+      return "update";
     }
 
     if(!memberUpdateForm.getPassword().equals(memberUpdateForm.getPasswordCheck())) {
       bindingResult.rejectValue("passwordCheck", "passwordIncorrect", "비밀번호가 일치하지 않습니다.");
-      return "updating";
+      return "update";
     }
 
     MemberDTO updateMemberDTO = MemberDTO.updateFormToDTO(memberUpdateForm, id);

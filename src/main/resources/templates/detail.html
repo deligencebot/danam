@@ -55,8 +55,7 @@
       <button id="updateReq" class="btn btn-primary">수정하기</button>
       <script th:inline="javascript">
         document.getElementById('updateReq').addEventListener('click', () => {
-          location.href =
-            '/member/detail/updating/' + /*[[${member.id}]]*/ 'null';
+          location.href = '/member/detail/api/' + /*[[${member.id}]]*/ 'null';
         });
       </script>
     </div>

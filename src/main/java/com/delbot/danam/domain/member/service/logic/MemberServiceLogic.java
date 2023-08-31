@@ -27,7 +27,10 @@ public class MemberServiceLogic implements MemberService{
 
   @Override
   public void join(MemberDTO memberDTO) { 
-    memberRepository.save(Member.dtoToEntity(memberDTO, passwordEncoder.encode(memberDTO.getPassword()))); 
+    //
+    memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
+    memberRepository.save(mapper.map(memberDTO, Member.class));
+    // memberRepository.save(Member.dtoToEntity(memberDTO, passwordEncoder.encode(memberDTO.getPassword()))); 
   }
 
   @Override
@@ -54,7 +57,7 @@ public class MemberServiceLogic implements MemberService{
     Optional<Member> foundMember = memberRepository.findByUsername(username);
 
     if (!foundMember.isPresent()) {
-      throw new NoSuchIdException(String.format("Member(%s) is not found"));
+      throw new NoSuchIdException(String.format("Member(%s) is not found", foundMember.toString()));
     }
 
     return mapper.map(foundMember.get(), MemberDTO.class);

@@ -1,0 +1,53 @@
+<!-- templates/layout.html -->
+<html layout:decorate="~{layout}">
+  <!-- templates/board_list.html -->
+  <div layout:fragment="content" class="container my-3">
+    <style>
+      .table-contents tr {
+        min-height: 50rem;
+      }
+    </style>
+    <div class="row">
+      <table class="table table" style="border: 1px solid #dddddd">
+        <thead>
+          <tr>
+            <th
+              style="background-color: #cccccc; text-align: left"
+              th:text="'&nbsp;&nbsp;' + ${board.boardTitle}"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span th:text="'&nbsp;' + ${board.boardWriter}"></span>
+              <span
+                th:if="${board.boardIsModified}"
+                style="float: right"
+                th:text="'조회수 : ' + ${board.boardHits} + 
+                ' 작성시간 : ' + *{#temporals.format(board.createdTime, 'yyyy-MM-dd HH:mm')} + 
+                ' 수정시간 : ' + *{#temporals.format(board.createdTime, 'yyyy-MM-dd HH:mm')} + '&nbsp;'"
+              ></span>
+              <span
+                th:unless="${board.boardIsModified}"
+                style="float: right"
+                th:text="'조회수 : ' + ${board.boardHits} + 
+              ' 작성시간 : ' + *{#temporals.format(board.createdTime, 'yyyy-MM-dd HH:mm')} + '&nbsp;'"
+              ></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="container" style="min-height: 30rem">
+                <p
+                  th:text="${board.boardContents}"
+                  style="text-align: left"
+                ></p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</html>

@@ -1,0 +1,28 @@
+<!-- templates/layout.html -->
+<html layout:decorate="~{layout}">
+  <!-- templates/board_wirte.html -->
+  <div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+      <div>
+        <h4>글작성</h4>
+      </div>
+    </div>
+    <div class="validation-form" novalidate>
+      <form th:action="@{/board/write}" th:object="${boardDTO}" method="post">
+        <div class="mb-3">
+          <input type="text" th:field="*{boardTitle}" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <textarea
+            class="form-control"
+            th:field="*{boardContents}"
+            id="content"
+            cols="100"
+            rows="10"
+          ></textarea>
+        </div>
+        <input class="btn btn-primary" type="submit" value="작성" />
+      </form>
+    </div>
+  </div>
+</html>
