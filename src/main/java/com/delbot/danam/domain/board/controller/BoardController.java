@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.delbot.danam.domain.board.dto.BoardDTO;
@@ -82,7 +83,7 @@ public class BoardController {
 
   @GetMapping("/{id}")
   public String viewDetail(@PathVariable Long id, BoardDTO boardDTO, Model model, Authentication authentication) {
-        //
+    //
     if (authentication != null && authentication.isAuthenticated()) {
       String username = authentication.getName();
       MemberDTO memberDTO = memberService.findMemberByUsername(username);
@@ -94,6 +95,38 @@ public class BoardController {
     model.addAttribute("board", board);
 
     return "/board_detail";
+  }
+
+  @GetMapping("/api/{id}")
+  public String updateForm(@PathVariable Long id, BoardDTO boardDTO, Model model, Authentication authentication) {
+    //
+    String username = authentication.getName();
+    MemberDTO memberDTO = memberService.findMemberByUsername(username);
+    BoardDTO foundBoardDTO = boardService.findById(id);
+    model.addAttribute("member", memberDTO);
+    model.addAttribute("board",foundBoardDTO);
+    if(!foundBoardDTO.getBoardWriter().equals(username)) {
+      return "redirect:/board";
+    }
+
+    return "board_update";
+  }
+
+  @PutMapping("/api/{id}")
+  public String update(@PathVariable Long id, BoardDTO boardDTO, Model model, Authentication authentication) {
+    //
+    String username = authentication.getName();
+    MemberDTO memberDTO = memberService.findMemberByUsername(username);
+    model.addAttribute("member", memberDTO);
+    BoardDTO foundBoardDTO = boardService.findById(id);
+
+    foundBoardDTO.setBoardTitle(boardDTO.getBoardTitle());
+    foundBoardDTO.setBoardContents(boardDTO.getBoardContents());
+    foundBoardDTO.setBoardIsModified(1L);
+    boardService.update(foundBoardDTO);
+    model.addAttribute("board",foundBoardDTO);
+    
+    return "board_detail";
   }
 
   // @GetMapping("/{type}")

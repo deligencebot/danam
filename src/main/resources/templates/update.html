@@ -55,7 +55,7 @@
             <label for="nickname" class="form-label">닉네임</label>
             <input
               type="text"
-              th:field="*{nickname}"
+              name="nickname"
               class="form-control"
               th:value="${member.nickname}"
             />
@@ -69,7 +69,7 @@
             <label for="phoneNumber" class="form-label">전화번호</label>
             <input
               type="text"
-              th:field="*{phoneNumber}"
+              name="phoneNumber"
               class="form-control"
               th:value="${member.phoneNumber}"
             />
@@ -83,7 +83,7 @@
             <label for="address" class="form-label">주소</label>
             <input
               type="text"
-              th:field="*{address}"
+              name="address"
               class="form-control"
               th:value="${member.address}"
             />
@@ -97,7 +97,7 @@
             <label for="email" class="form-label">이메일</label>
             <input
               type="text"
-              th:field="*{email}"
+              name="email"
               class="form-control"
               th:value="${member.email}"
             />

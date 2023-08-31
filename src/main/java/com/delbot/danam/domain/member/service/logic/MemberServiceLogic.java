@@ -30,7 +30,6 @@ public class MemberServiceLogic implements MemberService{
     //
     memberDTO.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
     memberRepository.save(mapper.map(memberDTO, Member.class));
-    // memberRepository.save(Member.dtoToEntity(memberDTO, passwordEncoder.encode(memberDTO.getPassword()))); 
   }
 
   @Override

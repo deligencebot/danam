@@ -12,6 +12,8 @@ public interface BoardService {
   public BoardDTO findById(Long id);
   public List<BoardDTO> findAll();
   public void write(BoardDTO boardDTO);
+  public void update(BoardDTO boardDTO);
+  public void delete(Long id);
   public Page<BoardDTO> paging(Pageable pageable);
   public Long getLastSequence(Long type);
   public void updateHits(Long id);

@@ -1,7 +1,6 @@
 package com.delbot.danam.domain.board.service.logic;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,6 +51,12 @@ public class BoardServiceLogic implements BoardService {
 
   @Override
   public void write(BoardDTO boardDTO) { boardRepository.save(mapper.map(boardDTO, Board.class)); }
+    
+  @Override
+  public void update(BoardDTO boardDTO) { boardRepository.save(mapper.map(boardDTO, Board.class)); }
+
+  @Override
+  public void delete(Long id) { boardRepository.deleteById(id); }
 
   @Override
   public Page<BoardDTO> paging(Pageable pageable) {
@@ -94,4 +99,7 @@ public class BoardServiceLogic implements BoardService {
   public void updateHits(Long id) {
     boardRepository.updateHits(id);
   }
+
+
+
 }

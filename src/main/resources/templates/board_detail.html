@@ -22,14 +22,14 @@
             <td>
               <span th:text="'&nbsp;' + ${board.boardWriter}"></span>
               <span
-                th:if="${board.boardIsModified}"
+                th:if="${board.boardIsModified.equals(1L)}"
                 style="float: right"
                 th:text="'조회수 : ' + ${board.boardHits} + 
                 ' 작성시간 : ' + *{#temporals.format(board.createdTime, 'yyyy-MM-dd HH:mm')} + 
                 ' 수정시간 : ' + *{#temporals.format(board.createdTime, 'yyyy-MM-dd HH:mm')} + '&nbsp;'"
               ></span>
               <span
-                th:unless="${board.boardIsModified}"
+                th:unless="${board.boardIsModified.equals(1L)}"
                 style="float: right"
                 th:text="'조회수 : ' + ${board.boardHits} + 
               ' 작성시간 : ' + *{#temporals.format(board.createdTime, 'yyyy-MM-dd HH:mm')} + '&nbsp;'"
@@ -49,5 +49,11 @@
         </tbody>
       </table>
     </div>
+    <a
+      th:if="${member.username.equals(board.boardWriter)}"
+      th:href="@{|/board/api/${board.id}}"
+      class="btn btn-success"
+      >글수정</a
+    >
   </div>
 </html>
