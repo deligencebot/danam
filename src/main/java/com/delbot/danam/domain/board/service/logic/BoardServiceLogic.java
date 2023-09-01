@@ -18,6 +18,9 @@ import com.delbot.danam.domain.board.entity.Board;
 import com.delbot.danam.domain.board.exception.NoSuchBoardException;
 import com.delbot.danam.domain.board.repository.BoardRepository;
 import com.delbot.danam.domain.board.service.BoardService;
+import com.delbot.danam.domain.member.entity.Member;
+import com.delbot.danam.domain.member.exception.NoSuchUsernameException;
+import com.delbot.danam.domain.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardServiceLogic implements BoardService {
   //
   private final BoardRepository boardRepository;
+  private final MemberRepository memberRepository;
   private final ModelMapper mapper;
 
   @Override
@@ -69,21 +73,29 @@ public class BoardServiceLogic implements BoardService {
     int pageLimit = 3;
     Page<Board> boardPages = boardRepository.findByBoardType(type, PageRequest.of(page, pageLimit, Sort.Direction.DESC, "boardSequence"));
 
-    Page<BoardDTO> boardDTOPage = boardPages.map(board -> new BoardDTO(
-      board.getId(),
-      board.getBoardSequence(), 
-      board.getBoardType(), 
-      board.getBoardTitle(), 
-      board.getBoardWriter(), 
-      board.getBoardContents(), 
-      board.getBoardHits(), 
-      board.getCreatedTime(), 
-      board.getUpdatedTime(), 
-      board.getBoardIsModified(),
-      board.getBoardIsNotice(), 
-      board.getBoardIsCommentable()));
+    Page<BoardDTO> boardDTOPages = boardPages.map(board -> {
+      String writerNickname = memberRepository.findByUsername(board.getBoardWriter())
+      .map(Member::getNickname)
+      .orElse(board.getBoardWriter());
 
-    return boardDTOPage;
+      return new BoardDTO(
+        board.getId(),
+                board.getBoardSequence(),
+                board.getBoardType(),
+                board.getBoardTitle(),
+                board.getBoardWriter(),
+                writerNickname,
+                board.getBoardContents(),
+                board.getBoardHits(),
+                board.getCreatedTime(),
+                board.getUpdatedTime(),
+                board.getBoardIsModified(),
+                board.getBoardIsNotice(),
+                board.getBoardIsCommentable()
+      );
+    });
+
+    return boardDTOPages;
   }
 
   @Override

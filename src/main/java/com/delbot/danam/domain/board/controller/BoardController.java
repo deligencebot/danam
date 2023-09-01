@@ -38,7 +38,7 @@ public class BoardController {
       MemberDTO memberDTO = memberService.findMemberByUsername(username);
       model.addAttribute("member", memberDTO);
     }
-    
+    //
     Page<BoardDTO> boardList = boardService.getPage(type, pageable);
     model.addAttribute("type", type.toString());
     model.addAttribute("boardList", boardList);
@@ -52,7 +52,7 @@ public class BoardController {
     String username = authentication.getName();
     MemberDTO memberDTO = memberService.findMemberByUsername(username);
     model.addAttribute("member", memberDTO);
-
+    //
     model.addAttribute("type", type.toString());
     return "board_write";
   }
@@ -63,7 +63,7 @@ public class BoardController {
     String username = authentication.getName();
     MemberDTO memberDTO = memberService.findMemberByUsername(username);
     model.addAttribute("member", memberDTO);
-
+    //
     model.addAttribute("type", type);
 
     BoardDTO newBoardDTO = BoardDTO.builder()
@@ -77,7 +77,6 @@ public class BoardController {
     .boardIsNotice(0L)
     .boardIsCommentable(0L)
     .build();
-
     boardService.write(newBoardDTO);
     
     return new StringBuilder()
@@ -96,8 +95,9 @@ public class BoardController {
       MemberDTO memberDTO = memberService.findMemberByUsername(username);
       model.addAttribute("member", memberDTO);
     }
-
+    //
     BoardDTO board = boardService.updateHits(type, seq);
+    board.setBoardWriterNick(memberService.findMemberByUsername(board.getBoardWriter()).getNickname()); 
     model.addAttribute("board", board);
 
     return "/board_detail";
@@ -108,8 +108,9 @@ public class BoardController {
     //
     String username = authentication.getName();
     MemberDTO memberDTO = memberService.findMemberByUsername(username);
-    BoardDTO foundBoardDTO = boardService.findByTypeAndSequence(type, seq);
     model.addAttribute("member", memberDTO);
+    //
+    BoardDTO foundBoardDTO = boardService.findByTypeAndSequence(type, seq);
     model.addAttribute("board",foundBoardDTO);
 
     return foundBoardDTO.getBoardWriter().equals(username) ? "board_update" : Script.locationMsg("redirect:/board/" + type, "잘못된 접근입니다.", model);
@@ -121,7 +122,7 @@ public class BoardController {
     String username = authentication.getName();
     MemberDTO memberDTO = memberService.findMemberByUsername(username);
     model.addAttribute("member", memberDTO);
-
+    //
     BoardDTO foundBoardDTO = boardService.findByTypeAndSequence(type, seq);
     foundBoardDTO.setBoardTitle(boardDTO.getBoardTitle());
     foundBoardDTO.setBoardContents(boardDTO.getBoardContents());
@@ -131,7 +132,4 @@ public class BoardController {
     
     return "board_detail";
   }
-
-
-
 }

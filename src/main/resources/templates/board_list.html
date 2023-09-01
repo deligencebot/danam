@@ -21,7 +21,7 @@
               th:text="${board.boardTitle}"
             ></a>
           </td>
-          <td th:text="${board.boardWriter}"></td>
+          <td th:text="${board.boardWriterNick}"></td>
           <td
             th:text="*{#temporals.format(board.createdTime, 'yyyy-MM-dd HH:mm')}"
           ></td>

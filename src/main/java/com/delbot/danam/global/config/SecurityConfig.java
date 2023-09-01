@@ -17,6 +17,7 @@ public class SecurityConfig {
   //
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {
+    //
     return web -> {
       web.ignoring().antMatchers("/js/**", "/css/**", "/images/**", "/bootstrap.min.css", "/bootstrap.min.js");
     };
@@ -27,7 +28,7 @@ public class SecurityConfig {
     return http
     .csrf().disable()
     .authorizeRequests()
-      .antMatchers("/", "/member/join", "/member/login", "/board").permitAll()
+      .antMatchers("/", "/member/join", "/member/login").permitAll()
       .anyRequest().authenticated()
       .and()
     .formLogin()
@@ -52,9 +53,7 @@ public class SecurityConfig {
   }
 
   @Bean
-	public PasswordEncoder PasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+	public PasswordEncoder PasswordEncoder() { return new BCryptPasswordEncoder(); }
 
   @Bean
   AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
