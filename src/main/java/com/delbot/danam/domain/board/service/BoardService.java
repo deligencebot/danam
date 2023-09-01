@@ -11,10 +11,11 @@ public interface BoardService {
   //
   public BoardDTO findById(Long id);
   public List<BoardDTO> findAll();
+  public BoardDTO findByTypeAndSequence(Long type, Long seq);
   public void write(BoardDTO boardDTO);
   public void update(BoardDTO boardDTO);
   public void delete(Long id);
-  public Page<BoardDTO> paging(Pageable pageable);
+  public Page<BoardDTO> getPage(Long type, Pageable pageable);
   public Long getLastSequence(Long type);
-  public void updateHits(Long id);
+  public BoardDTO updateHits(Long type, Long seq);
 }

@@ -17,7 +17,7 @@
           <td th:text="${board.boardSequence}"></td>
           <td>
             <a
-              th:href="@{|/board/${board.id}|}"
+              th:href="@{|/board/${type}/${board.boardSequence}|(page=${boardList.number + 1})}"
               th:text="${board.boardTitle}"
             ></a>
           </td>
@@ -29,6 +29,54 @@
         </tr>
       </tbody>
     </table>
-    <a th:href="@{/board/write}" class="btn btn-success">글쓰기</a>
+    <!-- Paging -->
+    <div th:if="${!boardList.isEmpty()}">
+      <ul class="pagination justify-content-center">
+        <li
+          class="page-item"
+          th:classappend="${!boardList.hasPrevious} ? 'disabled'"
+        >
+          <a class="page-link" th:href="@{|?page=1|}">처음</a>
+        </li>
+        <li
+          class="page-item"
+          th:classappend="${!boardList.hasPrevious} ? 'disabled'"
+        >
+          <a class="page-link" th:href="@{|?page=${boardList.number}|}">
+            <span>이전</span>
+          </a>
+        </li>
+        <li
+          th:each="page: ${#numbers.sequence(1, boardList.totalPages)}"
+          th:if="${page >= boardList.number-5 and page <= boardList.number+5}"
+          th:classappend="${page == boardList.number + 1} ? 'active'"
+          class="page-item"
+        >
+          <a
+            th:text="${page}"
+            class="page-link"
+            th:href="@{|?page=${page}|}"
+          ></a>
+        </li>
+        <li
+          class="page-item"
+          th:classappend="${!boardList.hasNext} ? 'disabled'"
+        >
+          <a class="page-link" th:href="@{|?page=${boardList.number + 2}|}">
+            <span>다음</span>
+          </a>
+        </li>
+        <li
+          class="page-item"
+          th:classappend="${!boardList.hasNext} ? 'disabled'"
+        >
+          <a class="page-link" th:href="@{|?page=${boardList.totalPages}|}"
+            >마지막</a
+          >
+        </li>
+      </ul>
+    </div>
+    <!-- Paging -->
+    <a th:href="@{|/board/${type}/write|}" class="btn btn-success">글쓰기</a>
   </div>
 </html>

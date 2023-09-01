@@ -51,7 +51,7 @@
     </div>
     <a
       th:if="${member.username.equals(board.boardWriter)}"
-      th:href="@{|/board/api/${board.id}}"
+      th:href="@{|/board/${type}/${board.boardSequence}/api|}"
       class="btn btn-success"
       >글수정</a
     >

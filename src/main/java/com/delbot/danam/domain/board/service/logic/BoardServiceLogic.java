@@ -1,8 +1,8 @@
 package com.delbot.danam.domain.board.service.logic;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.delbot.danam.domain.board.dto.BoardDTO;
 import com.delbot.danam.domain.board.entity.Board;
+import com.delbot.danam.domain.board.exception.NoSuchBoardException;
 import com.delbot.danam.domain.board.repository.BoardRepository;
 import com.delbot.danam.domain.board.service.BoardService;
 
@@ -30,12 +31,8 @@ public class BoardServiceLogic implements BoardService {
   @Override
   public BoardDTO findById(Long id) {
     //
-    Optional<Board> optionalBoard = boardRepository.findById(id);
-    if(optionalBoard.isPresent()) {
-      return mapper.map(optionalBoard.get(), BoardDTO.class);
-    } else {
-      return null;
-    }
+    return mapper.map(boardRepository.findById(id)
+    .orElseThrow(() -> new NoSuchBoardException("해당 게시글을 찾을 수 없습니다.\nID : " + id)), BoardDTO.class);
   }
 
   @Override
@@ -50,6 +47,13 @@ public class BoardServiceLogic implements BoardService {
   }
 
   @Override
+  public BoardDTO findByTypeAndSequence(Long type, Long seq) {
+    //
+    return mapper.map(boardRepository.findByBoardTypeAndBoardSequence(type, seq)
+    .orElseThrow(() -> new NoSuchBoardException("해당 게시글을 찾을 수 없습니다.\nType : " + type + "\nSequence : " + seq)), BoardDTO.class);
+  }
+
+  @Override
   public void write(BoardDTO boardDTO) { boardRepository.save(mapper.map(boardDTO, Board.class)); }
     
   @Override
@@ -59,13 +63,13 @@ public class BoardServiceLogic implements BoardService {
   public void delete(Long id) { boardRepository.deleteById(id); }
 
   @Override
-  public Page<BoardDTO> paging(Pageable pageable) {
+  public Page<BoardDTO> getPage(Long type, Pageable pageable) {
     //
     int page = pageable.getPageNumber() - 1;
-    int pageLimit = 10;
-    Page<Board> boardPages = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.Direction.DESC, "boardSequence"));
+    int pageLimit = 3;
+    Page<Board> boardPages = boardRepository.findByBoardType(type, PageRequest.of(page, pageLimit, Sort.Direction.DESC, "boardSequence"));
 
-    Page<BoardDTO> boardDTOs = boardPages.map(board -> new BoardDTO(
+    Page<BoardDTO> boardDTOPage = boardPages.map(board -> new BoardDTO(
       board.getId(),
       board.getBoardSequence(), 
       board.getBoardType(), 
@@ -79,27 +83,26 @@ public class BoardServiceLogic implements BoardService {
       board.getBoardIsNotice(), 
       board.getBoardIsCommentable()));
 
-    return boardDTOs;
+    return boardDTOPage;
   }
 
   @Override
   public Long getLastSequence(Long type) {
     //
-    Optional<Board> optionalBoard = boardRepository.findByBoardType(type).stream().reduce((first, second) -> second);
-
-    if (optionalBoard.isPresent()) {
-      return optionalBoard.get().getBoardSequence() + 1L ;
-    } else {
-      return 1L;
-    }
+    return boardRepository.findByBoardType(type)
+    .stream()
+    .map(Board::getBoardSequence)
+    .max(Comparator.naturalOrder())
+    .orElse(0L) + 1L;
   }
 
   @Override
   @Transactional
-  public void updateHits(Long id) {
-    boardRepository.updateHits(id);
+  public BoardDTO updateHits(Long type, Long seq) {
+    //
+    Board board = boardRepository.findByBoardTypeAndBoardSequence(type, seq)
+    .orElseThrow(() -> new NoSuchBoardException("해당 게시글을 찾을 수 없습니다.\nType : " + type + "\nSequence : " + seq));
+    boardRepository.updateHits(board.getId());
+    return mapper.map(board, BoardDTO.class);
   }
-
-
-
 }

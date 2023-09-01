@@ -9,7 +9,7 @@
     </div>
     <div class="validation-form" novalidate>
       <form
-        th:action="@{|/board/api/${board.id}|}"
+        th:action="@{|/board/${type}/${board.boardSequence}/api|}"
         th:object="${boardDTO}"
         th:method="put"
       >

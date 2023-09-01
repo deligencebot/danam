@@ -8,7 +8,11 @@
       </div>
     </div>
     <div class="validation-form" novalidate>
-      <form th:action="@{/board/write}" th:object="${boardDTO}" method="post">
+      <form
+        th:action="@{|/board/${type}/write|}"
+        th:object="${boardDTO}"
+        method="post"
+      >
         <div class="mb-3">
           <input type="text" th:field="*{boardTitle}" class="form-control" />
         </div>
