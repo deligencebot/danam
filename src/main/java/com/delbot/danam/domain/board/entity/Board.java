@@ -1,10 +1,8 @@
 package com.delbot.danam.domain.board.entity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,8 +40,8 @@ public class Board extends com.delbot.danam.domain.Entity{
   // @OneToMany(mappedBy = "board", orphanRemoval = true, fetch = FetchType.LAZY)
   // private List<BoardImage> boardImageList = new ArrayList<>();
 
-  // @OneToMany(mappedBy = "board", orphanRemoval = true, fetch = FetchType.LAZY)
-  // private List<BoardFile> boardFileList = new ArrayList<>();
+  @OneToMany(mappedBy = "board", orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<BoardFile> boardFileList = new ArrayList<>();
 
   // @OneToMany(mappedBy = "board", orphanRemoval = true, fetch = FetchType.LAZY)
   // private List<BoardImage> boardCommentList = new ArrayList<>();

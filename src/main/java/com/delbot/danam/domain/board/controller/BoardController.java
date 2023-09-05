@@ -106,9 +106,10 @@ public class BoardController {
       model.addAttribute("member", memberDTO);
     }
     //
-    BoardDTO board = boardService.updateHits(type, seq);
-    board.setBoardWriterNick(memberService.findMemberByUsername(board.getBoardWriter()).getNickname()); 
-    model.addAttribute("board", board);
+    boardService.updateHits(type, seq);
+    BoardDTO foundBoard = boardService.findByTypeAndSequence(type, seq);
+    foundBoard.setBoardWriterNick(memberService.findMemberByUsername(foundBoard.getBoardWriter()).getNickname()); 
+    model.addAttribute("board", foundBoard);
 
     return "/board_detail";
   }

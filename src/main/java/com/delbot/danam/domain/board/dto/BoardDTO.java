@@ -7,6 +7,8 @@ import javax.validation.constraints.NotBlank;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.delbot.danam.domain.board.entity.Board;
+
 import groovy.transform.ToString;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,7 +43,7 @@ public class BoardDTO {
 
   private List<MultipartFile> boardFile;
   private List<String> originalFileName;
-  private List<String> savedFilename;
+  private List<String> savedFileName;
 
   @Builder(builderMethodName = "pageFormBuilder", buildMethodName = "buildPageForm")
   public BoardDTO(Long id, Long boardSequence, Long boardType, String boardTitle, String boardWriterNick, Long boardHits, LocalDateTime createdTime) {
@@ -53,5 +55,22 @@ public class BoardDTO {
     this.boardWriterNick = boardWriterNick;
     this.boardHits = boardHits;
     this.createdTime = createdTime;
+  }
+
+  public static BoardDTO entityToDTO(Board board) {
+    return BoardDTO.builder()
+    .id(board.getId())
+    .boardSequence(board.getBoardSequence())
+    .boardType(board.getBoardType())
+    .boardTitle(board.getBoardTitle())
+    .boardWriter(board.getBoardWriter())
+    .boardContents(board.getBoardContents())
+    .boardHits(board.getBoardHits())
+    .createdTime(board.getCreatedTime())
+    .updatedTime(board.getUpdatedTime())
+    .boardIsModified(board.getBoardIsModified())
+    .boardIsNotice(board.getBoardIsNotice())
+    .boardIsCommentable(board.getBoardIsCommentable())
+    .build();
   }
 }
