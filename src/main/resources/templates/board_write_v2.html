@@ -1,0 +1,52 @@
+<!-- templates/layout.html -->
+<html layout:decorate="~{layout}">
+  <!-- templates/board_wirte_v2.html -->
+  <div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+      <div>
+        <h4>글작성</h4>
+      </div>
+    </div>
+    <div class="validation-form" novalidate>
+      <form
+        id="form"
+        enctype="multipart/form-data"
+        th:action="@{|/board/${type}/write|}"
+        th:object="${boardDTO}"
+        method="post"
+      >
+        <div class="mb-3">
+          <input type="text" th:field="*{boardTitle}" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <textarea
+            class="form-control"
+            th:field="*{boardContents}"
+            id="contents"
+            cols="100"
+            rows="10"
+          ></textarea>
+        </div>
+        <input class="btn btn-success" type="submit" value="작성완료" />
+      </form>
+    </div>
+    <!-- CKEDITOR -->
+    <script src="/js/ckeditor/ckeditor.js"></script>
+    <script th:inline="javascript">
+      //
+      $(function () {
+        //
+        CKEDITOR.replace('contents', {
+          filebrowserUploadUrl: '/board/write/imageUpload',
+          font_name:
+            '맑은 고딕/Malgun Gothic;굴림/Gulim;돋움/Dotum;바탕/Batang;궁서/Gungsuh;Arial/Arial;Comic Sans MS/Comic Sans MS;Courier New/Courier New;Georgia/Georgia;Lucida Sans Unicode/Lucida Sans Unicode;Tahoma/Tahoma;Times New Roman/Times New Roman;MS Mincho/MS Mincho;Trebuchet MS/Trebuchet MS;Verdana/Verdana',
+          font_defaultLable: '맑은 고딕/Malgun Gothic',
+          fontSize_defaultLabel: '12',
+          skin: 'minimalist',
+          language: 'ko',
+          extraPlugins: 'autogrow',
+        });
+      });
+    </script>
+  </div>
+</html>

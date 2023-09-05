@@ -49,6 +49,10 @@
         </tbody>
       </table>
     </div>
+    <div class="row" th:each="fileName : ${board.originalFileName}">
+      <i class="bi bi-download"></i>
+      <a th:text="${fileName}"></a>
+    </div>
     <a
       th:if="${member.username.equals(board.boardWriter)}"
       th:href="@{|/board/${type}/${board.boardSequence}/api|}"

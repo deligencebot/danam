@@ -19,7 +19,6 @@ import com.delbot.danam.domain.board.exception.NoSuchBoardException;
 import com.delbot.danam.domain.board.repository.BoardRepository;
 import com.delbot.danam.domain.board.service.BoardService;
 import com.delbot.danam.domain.member.entity.Member;
-import com.delbot.danam.domain.member.exception.NoSuchUsernameException;
 import com.delbot.danam.domain.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -58,7 +57,7 @@ public class BoardServiceLogic implements BoardService {
   }
 
   @Override
-  public void write(BoardDTO boardDTO) { boardRepository.save(mapper.map(boardDTO, Board.class)); }
+  public Long write(BoardDTO boardDTO) { return boardRepository.save(mapper.map(boardDTO, Board.class)).getId(); }
     
   @Override
   public void update(BoardDTO boardDTO) { boardRepository.save(mapper.map(boardDTO, Board.class)); }
@@ -80,19 +79,13 @@ public class BoardServiceLogic implements BoardService {
 
       return new BoardDTO(
         board.getId(),
-                board.getBoardSequence(),
-                board.getBoardType(),
-                board.getBoardTitle(),
-                board.getBoardWriter(),
-                writerNickname,
-                board.getBoardContents(),
-                board.getBoardHits(),
-                board.getCreatedTime(),
-                board.getUpdatedTime(),
-                board.getBoardIsModified(),
-                board.getBoardIsNotice(),
-                board.getBoardIsCommentable()
-      );
+        board.getBoardSequence(),
+        board.getBoardType(),
+        board.getBoardTitle(),
+        writerNickname,
+        board.getBoardHits(),
+        board.getCreatedTime()
+        );
     });
 
     return boardDTOPages;

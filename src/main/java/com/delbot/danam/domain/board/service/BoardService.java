@@ -12,7 +12,7 @@ public interface BoardService {
   public BoardDTO findById(Long id);
   public List<BoardDTO> findAll();
   public BoardDTO findByTypeAndSequence(Long type, Long seq);
-  public void write(BoardDTO boardDTO);
+  public Long write(BoardDTO boardDTO);
   public void update(BoardDTO boardDTO);
   public void delete(Long id);
   public Page<BoardDTO> getPage(Long type, Pageable pageable);

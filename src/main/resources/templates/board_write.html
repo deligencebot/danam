@@ -12,6 +12,7 @@
         th:action="@{|/board/${type}/write|}"
         th:object="${boardDTO}"
         method="post"
+        enctype="multipart/form-data"
       >
         <div class="mb-3">
           <input type="text" th:field="*{boardTitle}" class="form-control" />
@@ -24,6 +25,17 @@
             cols="100"
             rows="10"
           ></textarea>
+        </div>
+        <div class="input-group mb-3">
+          <input
+            type="file"
+            name="boardFile"
+            th:field="*{boardFile}"
+            class="form-control"
+            id="inputGroupFile02"
+            multiple
+          />
+          <label class="input-group-text" for="inputGroupFile02">업로드</label>
         </div>
         <input class="btn btn-success" type="submit" value="작성완료" />
       </form>

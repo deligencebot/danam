@@ -37,6 +37,7 @@ dependencies {
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE")
 	// https://mvnrepository.com/artifact/org.modelmapper/modelmapper
 	implementation("org.modelmapper:modelmapper:3.1.1")
+	implementation("commons-io:commons-io:2.11.0")
 }
 
 tasks.withType<Test> {
