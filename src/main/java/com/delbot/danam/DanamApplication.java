@@ -7,7 +7,8 @@ import org.springframework.context.annotation.PropertySources;
 
 @SpringBootApplication
 @PropertySources({
-	@PropertySource("classpath:file.properties")
+	@PropertySource("classpath:file.properties"),
+	@PropertySource("classpath:image.properties")
 })
 public class DanamApplication {
 //

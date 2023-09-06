@@ -29,6 +29,18 @@
         <div class="input-group mb-3">
           <input
             type="file"
+            name="boardImage"
+            th:field="*{boardImage}"
+            class="form-control"
+            id="inputGroupFile02"
+            accept=".jpg, .png, .gif, .jpeg, .webp"
+            multiple
+          />
+          <label class="input-group-text" for="inputGroupFile02">이미지</label>
+        </div>
+        <div class="input-group mb-3">
+          <input
+            type="file"
             name="boardFile"
             th:field="*{boardFile}"
             class="form-control"

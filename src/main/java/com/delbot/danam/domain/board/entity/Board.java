@@ -37,8 +37,8 @@ public class Board extends com.delbot.danam.domain.Entity{
   @Column(length = 20, nullable = false)
   private Long boardHits;
 
-  // @OneToMany(mappedBy = "board", orphanRemoval = true, fetch = FetchType.LAZY)
-  // private List<BoardImage> boardImageList = new ArrayList<>();
+  @OneToMany(mappedBy = "board", orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<BoardImage> boardImageList = new ArrayList<>();
 
   @OneToMany(mappedBy = "board", orphanRemoval = true, fetch = FetchType.LAZY)
   private List<BoardFile> boardFileList = new ArrayList<>();

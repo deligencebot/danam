@@ -49,9 +49,24 @@
         </tbody>
       </table>
     </div>
-    <div class="row" th:each="fileName : ${board.originalFileName}">
-      <i class="bi bi-download"></i>
-      <a th:text="${fileName}"></a>
+    <div class="container">
+      <div th:each="imageName : ${board.savedImageName}">
+        <img th:src="@{|/upload/images/${imageName}|}" />
+      </div>
+    </div>
+    <div class="container">
+      <div
+        th:each="fileName, index : ${board.originalFileName}"
+        style="max-width: 30vw"
+      >
+        <a
+          class="btn btn-light"
+          th:href="@{|/board/file/${board.savedFileName[__${index.index}__]}|}"
+        >
+          <i class="bi bi-download"></i>&nbsp;
+          <span th:text="${fileName}"></span>
+        </a>
+      </div>
     </div>
     <a
       th:if="${member.username.equals(board.boardWriter)}"

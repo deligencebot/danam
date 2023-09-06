@@ -10,47 +10,46 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.delbot.danam.domain.board.dto.BoardFileDTO;
+import com.delbot.danam.domain.board.dto.BoardImageDTO;
 import com.delbot.danam.domain.board.entity.Board;
-import com.delbot.danam.domain.board.entity.BoardFile;
+import com.delbot.danam.domain.board.entity.BoardImage;
 import com.delbot.danam.domain.board.exception.NoSuchBoardException;
-import com.delbot.danam.domain.board.exception.NoSuchBoardFileException;
-import com.delbot.danam.domain.board.repository.BoardFileRepository;
+import com.delbot.danam.domain.board.exception.NoSuchBoardImageException;
+import com.delbot.danam.domain.board.repository.BoardImageRepository;
 import com.delbot.danam.domain.board.repository.BoardRepository;
-import com.delbot.danam.domain.board.service.BoardFileService;
+import com.delbot.danam.domain.board.service.BoardImageService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class BoardFileServiceLogic implements BoardFileService{
+public class BoardImagaServiceLogic implements BoardImageService{
   //
-  @Value("${file.path}")
-  private String imageDir;
+  @Value("${image.path}")
+  private String fileDir;
 
   private final BoardRepository boardRepository;
-  private final BoardFileRepository boardFileRepository;
+  private final BoardImageRepository boardImageRepository;
   private final ModelMapper mapper;
 
   @Override
-  public BoardFileDTO findBySavedName(String name) {
-    //
-    return mapper.map(boardFileRepository.findBySavedName(name).orElseThrow(()
-      -> new NoSuchBoardFileException("해당 파일이 없습니다.\nName : " + name)), BoardFileDTO.class);
+  public BoardImageDTO findBySavedName(String name) {
+    return mapper.map(boardImageRepository.findBySavedName(name).orElseThrow(() 
+    -> new NoSuchBoardImageException("해당 이미지가 없습니다.\nName : " + name)), BoardImageDTO.class);
   }
 
   @Override
-  public void saveFile(MultipartFile file, Long id) throws IOException {
+  public void saveImage(MultipartFile file, Long id) throws IOException {
     //
     String originalName = file.getOriginalFilename();
     String uuid = UUID.randomUUID().toString();
     String extension = FilenameUtils.getExtension(file.getOriginalFilename());
     String savedName = uuid + "." + extension;
-    String savedPath = imageDir + savedName;
+    String savedPath = fileDir + savedName;
 
     Board board = boardRepository.findById(id).orElseThrow(() -> new NoSuchBoardException("해당 게시글을 찾을 수 없습니다.\nID : " + id));
 
-    BoardFile boardFile = BoardFile.builder()
+    BoardImage boardImage = BoardImage.builder()
       .originalName(originalName)
       .savedName(savedName)
       .savedPath(savedPath)
@@ -58,7 +57,8 @@ public class BoardFileServiceLogic implements BoardFileService{
       .build();
 
     file.transferTo(new File(savedPath));
-    boardFileRepository.save(boardFile);
+    boardImageRepository.save(boardImage);
     System.out.println("Save : " + originalName);
   }
+  
 }

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.delbot.danam.domain.board.dto.BoardDTO;
 import com.delbot.danam.domain.board.entity.Board;
 import com.delbot.danam.domain.board.entity.BoardFile;
+import com.delbot.danam.domain.board.entity.BoardImage;
 import com.delbot.danam.domain.board.exception.NoSuchBoardException;
 import com.delbot.danam.domain.board.repository.BoardRepository;
 import com.delbot.danam.domain.board.service.BoardService;
@@ -39,6 +40,19 @@ public class BoardServiceLogic implements BoardService {
     .orElseThrow(() -> new NoSuchBoardException("해당 게시글을 찾을 수 없습니다.\nType : " + type + "\nSequence : " + seq));
 
     BoardDTO boardDTO = BoardDTO.entityToDTO(board);
+
+    if (board.getBoardImageList() != null && !board.getBoardImageList().isEmpty()) {
+    List<String> originalImageNameList = board.getBoardImageList().stream()
+            .map(BoardImage::getOriginalName)
+            .collect(Collectors.toList());
+
+    List<String> savedImageNameList = board.getBoardImageList().stream()
+            .map(BoardImage::getSavedName)
+            .collect(Collectors.toList());
+
+    boardDTO.setOriginalImageName(originalImageNameList);
+    boardDTO.setSavedImageName(savedImageNameList);
+    }
 
     if (board.getBoardFileList() != null && !board.getBoardFileList().isEmpty()) {
         List<String> originalFileNameList = board.getBoardFileList().stream()

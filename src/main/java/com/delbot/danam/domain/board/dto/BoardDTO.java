@@ -45,6 +45,10 @@ public class BoardDTO {
   private List<String> originalFileName;
   private List<String> savedFileName;
 
+  private List<MultipartFile> boardImage;
+  private List<String> originalImageName;
+  private List<String> savedImageName;
+
   @Builder(builderMethodName = "pageFormBuilder", buildMethodName = "buildPageForm")
   public BoardDTO(Long id, Long boardSequence, Long boardType, String boardTitle, String boardWriterNick, Long boardHits, LocalDateTime createdTime) {
     //
