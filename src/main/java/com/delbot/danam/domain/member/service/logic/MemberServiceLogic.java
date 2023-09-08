@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.delbot.danam.domain.member.dto.MemberDTO;
 import com.delbot.danam.domain.member.entity.Member;
-import com.delbot.danam.domain.member.exception.NoSuchIdException;
-import com.delbot.danam.domain.member.exception.NoSuchUsernameException;
+import com.delbot.danam.domain.member.exception.NoSuchMemberException;
 import com.delbot.danam.domain.member.repository.MemberRepository;
 import com.delbot.danam.domain.member.service.MemberService;
 
@@ -40,14 +39,14 @@ public class MemberServiceLogic implements MemberService{
   public MemberDTO findMemberById(Long id) {
     //
     return mapper.map(memberRepository.findById(id)
-    .orElseThrow(() -> new NoSuchIdException("해당 멤버를 찾지 못했습니다.\nID : " + id)), MemberDTO.class);
+    .orElseThrow(() -> new NoSuchMemberException("해당 멤버를 찾지 못했습니다.\nID : " + id)), MemberDTO.class);
   }
 
   @Override
   public MemberDTO findMemberByUsername(String username) {
     //
     return mapper.map(memberRepository.findByUsername(username)
-    .orElseThrow(() -> new NoSuchUsernameException("해당 멤버를 찾지 못했습니다.\nUsername : " + username)), MemberDTO.class);
+    .orElseThrow(() -> new NoSuchMemberException("해당 멤버를 찾지 못했습니다.\nUsername : " + username)), MemberDTO.class);
   }
 
   @Override
@@ -98,7 +97,7 @@ public class MemberServiceLogic implements MemberService{
   public String updateCheck(Long id, String password) {
     //
     Member foundMember = memberRepository.findById(id)
-    .orElseThrow(() -> new NoSuchIdException("해당 멤버를 찾지 못했습니다.\nID : " + id));
+    .orElseThrow(() -> new NoSuchMemberException("해당 멤버를 찾지 못했습니다.\nID : " + id));
     return passwordEncoder.matches(password, foundMember.getPassword()) ? "OK" : "DIFF";
   }
 }

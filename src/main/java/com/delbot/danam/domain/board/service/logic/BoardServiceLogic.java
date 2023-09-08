@@ -37,18 +37,18 @@ public class BoardServiceLogic implements BoardService {
   public BoardDTO findByTypeAndSequence(Long type, Long seq) {
     //
     Board board = boardRepository.findByBoardTypeAndBoardSequence(type, seq)
-    .orElseThrow(() -> new NoSuchBoardException("해당 게시글을 찾을 수 없습니다.\nType : " + type + "\nSequence : " + seq));
+      .orElseThrow(() -> new NoSuchBoardException("해당 게시글을 찾을 수 없습니다.\nType : " + type + "\nSequence : " + seq));
 
     BoardDTO boardDTO = BoardDTO.entityToDTO(board);
 
     if (board.getBoardImageList() != null && !board.getBoardImageList().isEmpty()) {
     List<String> originalImageNameList = board.getBoardImageList().stream()
-            .map(BoardImage::getOriginalName)
-            .collect(Collectors.toList());
+      .map(BoardImage::getOriginalName)
+      .collect(Collectors.toList());
 
     List<String> savedImageNameList = board.getBoardImageList().stream()
-            .map(BoardImage::getSavedName)
-            .collect(Collectors.toList());
+      .map(BoardImage::getSavedName)
+      .collect(Collectors.toList());
 
     boardDTO.setOriginalImageName(originalImageNameList);
     boardDTO.setSavedImageName(savedImageNameList);
@@ -56,12 +56,12 @@ public class BoardServiceLogic implements BoardService {
 
     if (board.getBoardFileList() != null && !board.getBoardFileList().isEmpty()) {
         List<String> originalFileNameList = board.getBoardFileList().stream()
-                .map(BoardFile::getOriginalName)
-                .collect(Collectors.toList());
+          .map(BoardFile::getOriginalName)
+          .collect(Collectors.toList());
 
         List<String> savedFileNameList = board.getBoardFileList().stream()
-                .map(BoardFile::getSavedName)
-                .collect(Collectors.toList());
+          .map(BoardFile::getSavedName)
+          .collect(Collectors.toList());
 
         boardDTO.setOriginalFileName(originalFileNameList);
         boardDTO.setSavedFileName(savedFileNameList);
@@ -89,16 +89,14 @@ public class BoardServiceLogic implements BoardService {
     Page<Board> boardPages = boardRepository.findByBoardType(type, PageRequest.of(page, pageLimit, Sort.Direction.DESC, "boardSequence"));
 
     Page<BoardDTO> boardDTOPages = boardPages.map(board -> {
-      String writerNickname = memberRepository.findByUsername(board.getBoardWriter())
-      .map(Member::getNickname)
-      .orElse(board.getBoardWriter());
-
       return new BoardDTO(
         board.getId(),
         board.getBoardSequence(),
         board.getBoardType(),
         board.getBoardTitle(),
-        writerNickname,
+        memberRepository.findByUsername(board.getBoardWriter())
+          .map(Member::getNickname)
+          .orElse(board.getBoardWriter()),
         board.getBoardHits(),
         board.getCreatedTime()
         );

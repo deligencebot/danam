@@ -1,14 +1,17 @@
 package com.delbot.danam.domain.member.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.delbot.danam.domain.board.entity.BoardComment;
 import com.delbot.danam.domain.member.dto.MemberDTO;
 import com.delbot.danam.domain.member.vo.Gender;
 import com.delbot.danam.domain.member.vo.MemberRole;
@@ -52,6 +55,9 @@ public class Member extends com.delbot.danam.domain.Entity{
 
   @Column(length = 50, nullable = false)
   private String email;
+
+  @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+  private List<BoardComment> boardCommentList = new ArrayList<>();
 
   @Builder
   public Member(String username, String password, String name, String nickname, MemberRole role, Gender gender, String phoneNumber, String address, String email) {

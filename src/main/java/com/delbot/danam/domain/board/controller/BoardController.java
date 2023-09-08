@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -94,13 +95,21 @@ public class BoardController {
 
     if(boardDTO.getBoardImage() != null && !boardDTO.getBoardImage().isEmpty()) {
       for(MultipartFile file : boardDTO.getBoardImage()) {
-        boardImageService.saveImage(file, boardId);
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        if (!extension.isBlank()) {
+          boardImageService.saveImage(file, boardId);
+          System.out.println(extension);
+        }
       }
     }
 
     if(boardDTO.getBoardFile() != null && !boardDTO.getBoardFile().isEmpty()) {
       for(MultipartFile file : boardDTO.getBoardFile()) {
-        boardFileService.saveFile(file, boardId);
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        if (!extension.isBlank()) {
+          boardFileService.saveFile(file, boardId);
+          System.out.println(extension);
+        }
       }
     }
     

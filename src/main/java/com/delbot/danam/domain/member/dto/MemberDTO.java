@@ -2,9 +2,11 @@ package com.delbot.danam.domain.member.dto;
 
 import java.time.LocalDateTime;
 
+import com.delbot.danam.domain.member.entity.Member;
 import com.delbot.danam.domain.member.vo.Gender;
 import com.delbot.danam.domain.member.vo.MemberRole;
 
+import groovy.transform.builder.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +32,14 @@ public class MemberDTO {
   private String email;
   private LocalDateTime createdTime;
   private LocalDateTime updatedTime;
+
+  @Builder
+  public MemberDTO(Member member) {
+    this.id = member.getId();
+    this.username = member.getUsername();
+    this.nickname = member.getNickname();
+    this.role = member.getRole();
+  }
 
   public static MemberDTO joinFormToDTO(MemberJoinForm form) {
     //

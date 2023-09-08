@@ -18,6 +18,6 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
   Page<Board> findByBoardType(Long boardType, Pageable pageable);
   Optional<Board> findByBoardTypeAndBoardSequence(Long boardType, Long boardSequence);
   @Modifying
-  @Query(value = "update Board b set b.boardHits=b.boardHits+1 where b.id=:id")
+  @Query(value = "UPDATE Board b SET b.boardHits=b.boardHits+1 WHERE b.id=:id")
   void updateHits(@Param("id") Long id);
 }
