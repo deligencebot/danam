@@ -22,24 +22,18 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a
-            class="nav-link"
-            sec:authorize="isAnonymous()"
-            th:href="@{/member/login}"
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}"
             >로그인</a
           >
           <a
             class="nav-link"
             sec:authorize="isAuthenticated()"
-            th:href="@{/member/logout}"
+            th:href="@{/logout}"
             >로그아웃</a
           >
         </li>
         <li class="nav-item">
-          <a
-            class="nav-link"
-            sec:authorize="isAnonymous()"
-            th:href="@{/member/join}"
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/join}"
             >회원가입</a
           >
           <a

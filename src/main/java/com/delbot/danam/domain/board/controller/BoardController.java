@@ -45,14 +45,8 @@ public class BoardController {
   private final BoardImageService boardImageService;
 
   @GetMapping("/{type}")
-  public String listForm(@PathVariable Long type, @PageableDefault(page = 1) Pageable pageable, Model model, Authentication authentication) {
+  public String listForm(@PathVariable Long type, @PageableDefault(page = 1) Pageable pageable, Model model) {
     //
-    if (authentication != null && authentication.isAuthenticated()) {
-      String username = authentication.getName();
-      MemberDTO memberDTO = memberService.findMemberByUsername(username);
-      model.addAttribute("member", memberDTO);
-    }
-
     Page<BoardDTO> boardList = boardService.getPage(type, pageable);
     model.addAttribute("type", type.toString());
     model.addAttribute("boardList", boardList);
@@ -61,12 +55,8 @@ public class BoardController {
   }
 
   @GetMapping("/{type}/write")
-  public String writeForm(@PathVariable Long type, BoardDTO boardDTO, Model model, Authentication authentication) {
+  public String writeForm(@PathVariable Long type, BoardDTO boardDTO, Model model) {
     //
-    String username = authentication.getName();
-    MemberDTO memberDTO = memberService.findMemberByUsername(username);
-    model.addAttribute("member", memberDTO);
-
     model.addAttribute("type", type.toString());
     return "board_write";
   }
@@ -74,17 +64,13 @@ public class BoardController {
   @PostMapping("/{type}/write")
   public String wirte(@PathVariable Long type, BoardDTO boardDTO, Model model, Authentication authentication) throws IOException {
     //
-    String username = authentication.getName();
-    MemberDTO memberDTO = memberService.findMemberByUsername(username);
-    model.addAttribute("member", memberDTO);
-
     model.addAttribute("type", type);
 
     BoardDTO newBoardDTO = BoardDTO.builder()
     .boardSequence(boardService.getLastSequence(1L))
     .boardType(type)
     .boardTitle(boardDTO.getBoardTitle())
-    .boardWriter(username)
+    .boardWriter(authentication.getName())
     .boardContents(boardDTO.getBoardContents())
     .boardHits(0L)
     .boardIsModified(0L)
@@ -122,14 +108,8 @@ public class BoardController {
   }
 
   @GetMapping("/{type}/{seq}")
-  public String viewDetail(@PathVariable Long type, @PathVariable Long seq, BoardDTO boardDTO, Model model, Authentication authentication) {
+  public String viewDetail(@PathVariable Long type, @PathVariable Long seq, BoardDTO boardDTO, Model model) {
     //
-    if (authentication != null && authentication.isAuthenticated()) {
-      String username = authentication.getName();
-      MemberDTO memberDTO = memberService.findMemberByUsername(username);
-      model.addAttribute("member", memberDTO);
-    }
-
     boardService.updateHits(type, seq);
     BoardDTO foundBoard = boardService.findByTypeAndSequence(type, seq);
     foundBoard.setBoardWriterNick(memberService.findMemberByUsername(foundBoard.getBoardWriter()).getNickname()); 
@@ -141,23 +121,15 @@ public class BoardController {
   @GetMapping("/{type}/{seq}/api")
   public String updateForm(@PathVariable Long type, @PathVariable Long seq, BoardDTO boardDTO, Model model, Authentication authentication) {
     //
-    String username = authentication.getName();
-    MemberDTO memberDTO = memberService.findMemberByUsername(username);
-    model.addAttribute("member", memberDTO);
-
     BoardDTO foundBoardDTO = boardService.findByTypeAndSequence(type, seq);
     model.addAttribute("board",foundBoardDTO);
 
-    return foundBoardDTO.getBoardWriter().equals(username) ? "board_update" : Script.locationMsg("redirect:/board/" + type, "잘못된 접근입니다.", model);
+    return foundBoardDTO.getBoardWriter().equals(authentication.getName()) ? "board_update" : Script.locationMsg("redirect:/board/" + type, "잘못된 접근입니다.", model);
   }
 
   @PutMapping("/{type}/{seq}/api")
-  public String update(@PathVariable Long type, @PathVariable Long seq, BoardDTO boardDTO, Model model, Authentication authentication) {
+  public String update(@PathVariable Long type, @PathVariable Long seq, BoardDTO boardDTO, Model model) {
     //
-    String username = authentication.getName();
-    MemberDTO memberDTO = memberService.findMemberByUsername(username);
-    model.addAttribute("member", memberDTO);
-
     BoardDTO foundBoardDTO = boardService.findByTypeAndSequence(type, seq);
     foundBoardDTO.setBoardTitle(boardDTO.getBoardTitle());
     foundBoardDTO.setBoardContents(boardDTO.getBoardContents());

@@ -8,11 +8,7 @@
       </div>
     </div>
     <div class="validation-form" novalidate>
-      <form
-        th:action="@{/member/join}"
-        th:object="${memberJoinForm}"
-        method="post"
-      >
+      <form th:action="@{/join}" th:object="${memberJoinForm}" method="post">
         <div class="mb-3">
           <label for="username" class="form-label">사용자 ID</label>
           <input type="text" th:field="*{username}" class="form-control" />
