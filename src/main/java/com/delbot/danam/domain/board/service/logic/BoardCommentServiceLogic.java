@@ -33,12 +33,12 @@ public class BoardCommentServiceLogic implements BoardCommentService{
 
   @Override
   @Transactional
-  public void saveComment(BoardCommentRequestDTO commentRequestDTO, Long type, Long seq) {
+  public void saveComment(Long boardId, BoardCommentRequestDTO commentRequestDTO) {
     //
-    Member foundMember = memberRepository.findById(commentRequestDTO.getMemeberId())
-      .orElseThrow(() -> new NoSuchMemberException("해당 멤버를 찾지 못했습니다.\nID : " + commentRequestDTO.getMemeberId()));
-    Board foundBoard = boardRepository.findByBoardTypeAndBoardSequence(type, seq)
-      .orElseThrow(() -> new NoSuchBoardException("해당 게시글을 찾을 수 없습니다.\nType : " + type + "\nSequence : " + seq));
+    Member foundMember = memberRepository.findByUsername(commentRequestDTO.getMemeberName())
+      .orElseThrow(() -> new NoSuchMemberException("해당 멤버를 찾지 못했습니다.\nID : " + commentRequestDTO.getMemeberName()));
+    Board foundBoard = boardRepository.findById(boardId)
+      .orElseThrow(() -> new NoSuchBoardException("해당 게시글을 찾을 수 없습니다.\nId : " + boardId));
 
     BoardComment comment = BoardComment.builder()
       .commentContents(commentRequestDTO.getCommentContents())
@@ -52,6 +52,20 @@ public class BoardCommentServiceLogic implements BoardCommentService{
         .orElseThrow(() -> new NotFoundCommentException("해당 댓글을 찾을 수 없습니다.\nId : " + commentRequestDTO.getParentId()));
         comment.updateParent(parentComment);
     }
+
+    boardCommentRepository.save(comment);
+  }
+
+  @Override
+  @Transactional
+  public Long updateComment(Long id, BoardCommentRequestDTO commentRequestDTO) {
+    //
+    BoardComment comment = boardCommentRepository.findById(id)
+      .orElseThrow(() -> new NotFoundCommentException("해당 댓글을 찾을 수 없습니다.\nId : " + id));
+    
+    comment.updateComment(commentRequestDTO.getCommentContents());
+
+    return boardCommentRepository.save(comment).getBoard().getId();
   }
 
   @Override
@@ -74,22 +88,39 @@ public class BoardCommentServiceLogic implements BoardCommentService{
 
   @Override
   @Transactional
-  public void delete(Long id) {
+  public Long deleteComment(Long id) {
     //
     BoardComment comment = boardCommentRepository.findBoardCommentByIdWithParent(id)
       .orElseThrow(() -> new NotFoundCommentException("해당 댓글을 찾을 수 없습니다.\nId : " + id));
+    Long boardId = comment.getBoard().getId();
     if(comment.getChildren().size() != 0) {
       comment.updateIsDeleted(1L);
     } else {
       boardCommentRepository.delete(getDeletableAncestorComment(comment));
     }
+
+    return boardId;
   }
 
   private BoardComment getDeletableAncestorComment(BoardComment comment) {
+    //
     BoardComment parent = comment.getParent();
     if(parent != null && parent.getChildren().size() == 1 && parent.getIsDeleted() == 1L) {
       return getDeletableAncestorComment(parent);
     }
     return comment;
   }
+
+  @Override
+  public String checkMember(String memberName, Long id) {
+    //
+    BoardComment comment = boardCommentRepository.findById(id)
+      .orElseThrow(() -> new NotFoundCommentException("해당 댓글을 찾을 수 없습니다.\nId : " + id));
+    System.out.println("Compare " + memberName + comment.getMember().getUsername());
+    if(comment.getMember().getUsername().equals(memberName)) return "OK";
+    else return "NO";
+  }
 }
+
+
+

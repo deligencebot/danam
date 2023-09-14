@@ -32,7 +32,7 @@ public class BoardComment extends com.delbot.danam.domain.Entity{
   @Column
   private Long isDeleted;
 
-  @ManyToOne(fetch =  FetchType.LAZY)
+  @ManyToOne(fetch =  FetchType.EAGER)
   @JoinColumn(name = "member_id")
   private Member member;
 
@@ -61,5 +61,9 @@ public class BoardComment extends com.delbot.danam.domain.Entity{
 
   public void updateIsDeleted(Long isDeleted) {
     this.isDeleted = isDeleted;
+  }
+
+  public void updateComment(String commentContents) {
+    this.commentContents = commentContents;
   }
 }

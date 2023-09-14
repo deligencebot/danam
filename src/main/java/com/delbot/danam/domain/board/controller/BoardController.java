@@ -3,6 +3,7 @@ package com.delbot.danam.domain.board.controller;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.Resource;
@@ -23,12 +24,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
+import com.delbot.danam.domain.board.dto.BoardCommentResponseDTO;
 import com.delbot.danam.domain.board.dto.BoardDTO;
 import com.delbot.danam.domain.board.dto.BoardFileDTO;
+import com.delbot.danam.domain.board.service.BoardCommentService;
 import com.delbot.danam.domain.board.service.BoardFileService;
 import com.delbot.danam.domain.board.service.BoardImageService;
 import com.delbot.danam.domain.board.service.BoardService;
-import com.delbot.danam.domain.member.dto.MemberDTO;
 import com.delbot.danam.domain.member.service.MemberService;
 import com.delbot.danam.global.util.Script;
 
@@ -43,6 +45,7 @@ public class BoardController {
   private final BoardService boardService;
   private final BoardFileService boardFileService;
   private final BoardImageService boardImageService;
+  private final BoardCommentService boardCommentService;
 
   @GetMapping("/{type}")
   public String listForm(@PathVariable Long type, @PageableDefault(page = 1) Pageable pageable, Model model) {
@@ -112,8 +115,10 @@ public class BoardController {
     //
     boardService.updateHits(type, seq);
     BoardDTO foundBoard = boardService.findByTypeAndSequence(type, seq);
+    List<BoardCommentResponseDTO> commentResponseDTOList = boardCommentService.viewComments(foundBoard.getId());
     foundBoard.setBoardWriterNick(memberService.findMemberByUsername(foundBoard.getBoardWriter()).getNickname()); 
     model.addAttribute("board", foundBoard);
+    model.addAttribute("commentList", commentResponseDTOList);
 
     return "/board_detail";
   }

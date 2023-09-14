@@ -20,7 +20,7 @@ public class AuthenticationAdivce {
   //
   private final MemberService memberService;
 
-  @Before("execution(* com.delbot.danam.domain.member.controller.HomeController.home(..)) || execution(* com.delbot.danam.domain.board.controller.*.*(..))")
+  @Before("execution(* com.delbot.danam.domain.member.controller.HomeController.home(..)) || execution(* com.delbot.danam.domain.board.controller.BoardController.*(..))")
   public void addMemberInfoToModel(JoinPoint joinPoint) {
     //
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

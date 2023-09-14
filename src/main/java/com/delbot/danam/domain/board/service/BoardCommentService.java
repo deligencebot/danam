@@ -7,7 +7,9 @@ import com.delbot.danam.domain.board.dto.BoardCommentResponseDTO;
 
 public interface BoardCommentService {
   //
-  public void saveComment(BoardCommentRequestDTO boardCommentRequestDTO, Long boardType, Long boardSequence);
+  public void saveComment(Long boardId, BoardCommentRequestDTO boardCommentRequestDTO);
   public List<BoardCommentResponseDTO> viewComments(Long boardId);
-  public void delete(Long id);
+  public Long updateComment(Long id, BoardCommentRequestDTO boardCommentRequestDTO);
+  public Long deleteComment(Long id);
+  public String checkMember(String memberName, Long id);
 }

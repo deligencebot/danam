@@ -15,10 +15,14 @@ public class BoardCommentRequestDTO {
   //
   private Long id;
   private String commentContents;
-  private Long memeberId;
+  private String memeberName;
   private Long parentId;
 
   public BoardCommentRequestDTO(String commentContents) {
     this.commentContents = commentContents;
+  }
+
+  public void updateMemberName(String memberName) {
+    this.memeberName = memberName;
   }
 }
