@@ -1,0 +1,63 @@
+<!-- templates/layout.html -->
+<html layout:decorate="~{layout}">
+  <!-- templates/detail.html -->
+  <body>
+    <div layout:fragment="content" class="container my-3">
+      <div class="my-3 border-bottom">
+        <div>
+          <h4>회원정보</h4>
+        </div>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <dl class="row">
+            <dt class="col-sm-3">사용자ID</dt>
+            <dd class="col-sm-9" th:text="${member.username}"></dd>
+          </dl>
+        </li>
+        <li class="list-group-item">
+          <dl class="row">
+            <dt class="col-sm-3">이름</dt>
+            <dd class="col-sm-9" th:text="${member.name}"></dd>
+          </dl>
+        </li>
+        <li class="list-group-item">
+          <dl class="row">
+            <dt class="col-sm-3">별명</dt>
+            <dd class="col-sm-9" th:text="${member.nickname}"></dd>
+          </dl>
+        </li>
+        <li class="list-group-item">
+          <dl class="row">
+            <dt class="col-sm-3">성별</dt>
+            <dd class="col-sm-9" th:text="${member.gender}"></dd>
+          </dl>
+        </li>
+        <li class="list-group-item">
+          <dl class="row">
+            <dt class="col-sm-3">전화번호</dt>
+            <dd class="col-sm-9" th:text="${member.phoneNumber}"></dd>
+          </dl>
+        </li>
+        <li class="list-group-item">
+          <dl class="row">
+            <dt class="col-sm-3">주소</dt>
+            <dd class="col-sm-9" th:text="${member.address}"></dd>
+          </dl>
+        </li>
+        <li class="list-group-item">
+          <dl class="row">
+            <dt class="col-sm-3">이메일</dt>
+            <dd class="col-sm-9" th:text="${member.email}"></dd>
+          </dl>
+        </li>
+      </ul>
+      <button id="updateReq" class="btn btn-primary">수정하기</button>
+      <script th:inline="javascript">
+        document.getElementById('updateReq').addEventListener('click', () => {
+          location.href = '/member/detail/api/' + /*[[${member.id}]]*/ 'null';
+        });
+      </script>
+    </div>
+  </body>
+</html>

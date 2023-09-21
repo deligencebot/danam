@@ -1,0 +1,39 @@
+<!-- templates/layout.html -->
+<html layout:decorate="~{layout}">
+  <!-- templates/board_update.html -->
+  <div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+      <div>
+        <h4>글수정</h4>
+      </div>
+    </div>
+    <div class="validation-form" novalidate>
+      <form
+        enctype="multipart/form-data"
+        th:action="@{|/board/${type}/${board.boardSequence}/api|}"
+        th:object="${boardDTO}"
+        th:method="put"
+      >
+        <div class="mb-3">
+          <input
+            type="text"
+            name="boardTitle"
+            th:value="${board.boardTitle}"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <textarea
+            class="form-control"
+            name="boardContents"
+            th:text="${board.boardContents}"
+            id="content"
+            cols="100"
+            rows="10"
+          ></textarea>
+        </div>
+        <input class="btn btn-success" type="submit" value="수정완료" />
+      </form>
+    </div>
+  </div>
+</html>

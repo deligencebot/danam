@@ -1,0 +1,69 @@
+<!-- templates/layout.html -->
+{% include 'layout/navbar.html' %}
+
+<!-- templates/navbar.html -->
+<nav
+  th:fragment="navbarFragment"
+  class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom"
+>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">다남중앙교회</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}"
+            >로그인</a
+          >
+          <a
+            class="nav-link"
+            sec:authorize="isAuthenticated()"
+            th:href="@{/logout}"
+            >로그아웃</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/join}"
+            >회원가입</a
+          >
+          <a
+            class="nav-link"
+            sec:authorize="isAuthenticated()"
+            th:href="@{|/member/detail/${member.id}|}"
+            >회원정보</a
+          >
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            id="boardDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            게시판
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-dark"
+            aria-labelledby="boardDropdownMenuLink"
+          >
+            <li><a class="dropdown-item" th:href="@{/board/1}">게시판 1</a></li>
+            <li><a class="dropdown-item" th:href="@{/board/2}">게시판 2</a></li>
+            <li><a class="dropdown-item" th:href="@{/board/3}">게시판 3</a></li>
+            <li><a class="dropdown-item" th:href="@{/board/4}">게시판 4</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

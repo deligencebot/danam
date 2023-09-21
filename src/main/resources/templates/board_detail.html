@@ -1,0 +1,545 @@
+<!-- templates/layout.html -->
+<html layout:decorate="~{layout}">
+  <!-- templates/board_detail.html -->
+  <div layout:fragment="content" class="container my-3">
+    <style>
+      .table-contents tr {
+        min-height: 50rem;
+      }
+    </style>
+    <div
+      class="modal fade"
+      id="deleteCommentCheckModal"
+      tabindex="-1"
+      aria-labelledby="deleteCommentCheckModalLabel"
+      aria-hidden="true"
+      data-bs-backdrop="static"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteCommentCheckModalLabel">
+              댓글 삭제
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>삭제된 댓글은 복구되지 않습니다.</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              취소
+            </button>
+            <button type="button" class="btn btn-primary">확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="deleteBoardCheckModal"
+      tabindex="-1"
+      aria-labelledby="deleteBoardModalLabel"
+      aria-hidden="true"
+      data-bs-backdrop="static"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteBoardCheckModalLabel">
+              게시글 삭제
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>삭제된 게시글은 복구되지 않습니다.</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              취소
+            </button>
+            <form
+              th:action="@{|/board/${type}/${board.boardSequence}/api|}"
+              th:method="delete"
+            >
+              <button type="submit" class="btn btn-primary">확인</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Board -->
+    <div class="row">
+      <table class="table table" style="border: 1px solid #dddddd">
+        <thead>
+          <tr>
+            <th
+              style="background-color: #cccccc; text-align: left"
+              th:text="'&nbsp;&nbsp;' + ${board.boardTitle}"
+            ></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span th:text="'&nbsp;' + ${board.boardWriter}"></span>
+              <span
+                th:if="${board.boardIsModified.equals(1L)}"
+                style="float: right"
+                th:text="'조회수 : ' + ${board.boardHits} + 
+                ' 작성시간 : ' + *{#temporals.format(board.createdTime, 'yyyy-MM-dd HH:mm')} + 
+                ' 수정시간 : ' + *{#temporals.format(board.createdTime, 'yyyy-MM-dd HH:mm')} + '&nbsp;'"
+              ></span>
+              <span
+                th:unless="${board.boardIsModified.equals(1L)}"
+                style="float: right"
+                th:text="'조회수 : ' + ${board.boardHits} + 
+              ' 작성시간 : ' + *{#temporals.format(board.createdTime, 'yyyy-MM-dd HH:mm')} + '&nbsp;'"
+              ></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="container" style="min-height: 30rem">
+                <div
+                  class="container"
+                  style="float: right; max-width: fit-content"
+                >
+                  <div th:each="fileName, index : ${board.originalFileName}">
+                    <a
+                      class="btn btn-light"
+                      th:href="@{|/board/file/${board.savedFileName[__${index.index}__]}|}"
+                    >
+                      <i class="bi bi-download"></i>&nbsp;
+                      <span th:text="${fileName}"></span>
+                    </a>
+                  </div>
+                </div>
+                <div
+                  class="container"
+                  style="min-width: 80%; float: left; width: fit-content"
+                >
+                  <div th:each="imageName : ${board.savedImageName}">
+                    <img th:src="@{|/upload/images/${imageName}|}" />
+                  </div>
+                  <p
+                    th:text="${board.boardContents}"
+                    style="text-align: left; clear: both"
+                  ></p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="container" style="height: 50px; width: 100%">
+      <a
+        th:if="${member.username.equals(board.boardWriter)}"
+        th:href="@{|/board/${type}|}"
+        class="btn btn-success"
+        style="float: right"
+      >
+        목록
+      </a>
+      <button
+        th:if="${member.username.equals(board.boardWriter)}"
+        data-bs-toggle="modal"
+        data-bs-target="#deleteBoardCheckModal"
+        class="btn btn-success mx-2"
+        style="float: right"
+      >
+        삭제
+      </button>
+      <a
+        th:if="${member.username.equals(board.boardWriter)}"
+        th:href="@{|/board/${type}/${board.boardSequence}/api|}"
+        class="btn btn-success"
+        style="float: right"
+      >
+        수정
+      </a>
+    </div>
+    <!-- Comment Section -->
+    <section class="mb-5">
+      <div class="card bg-light">
+        <div class="card-body">
+          <div id="comment-write" class="mb-4">
+            <textarea
+              class="form-control"
+              id="commentContents"
+              rows="3"
+              placeholder="댓글을 입력해주세요"
+            ></textarea>
+            <button
+              class="btn btn-dark mt-2"
+              onclick="commentWrite()"
+              style="float: right"
+            >
+              등록
+            </button>
+          </div>
+          <!-- Comment List -->
+          <div id="comment-list">
+            <div class="d-flex mb-4" th:each="comment: ${commentList}">
+              <div class="ms-3" style="width: 100%">
+                <p
+                  th:if="${!comment.isDeleted}"
+                  class="fw-bold"
+                  th:text="${comment.commentWriter.nickname}"
+                ></p>
+                <p th:text="${comment.commentContents}"></p>
+                <button
+                  class="btn btn-dark btn-sm"
+                  th:if="${member.username.equals(comment.commentWriter.username) && !comment.isDeleted }"
+                  th:onclick="toggleUpdateForm([[${comment.id}]])"
+                >
+                  수정
+                </button>
+                <button
+                  class="btn btn-dark btn-sm"
+                  th:if="${member.username.equals(comment.commentWriter.username) && !comment.isDeleted }"
+                  data-bs-toggle="modal"
+                  data-bs-target="#deleteCommentCheckModal"
+                  th:data-comment-id="${comment.id}"
+                >
+                  삭제
+                </button>
+                <button
+                  class="btn btn-dark btn-sm"
+                  th:onclick="toggleReplyForm([[${comment.id}]])"
+                >
+                  답글
+                </button>
+                <div
+                  th:id="'updateForm-' + ${comment.id}"
+                  style="display: none; width: 100%"
+                >
+                  <div id="comment-update" class="mt-2">
+                    <textarea
+                      class="form-control mb-2"
+                      th:id="'commentUpdateContents-' + ${comment.id}"
+                      th:text="${comment.commentContents}"
+                      rows="3"
+                      placeholder="댓글을 입력해주세요"
+                    ></textarea>
+                    <button
+                      class="btn btn-dark btn-sm"
+                      th:onclick="commentUpdate([[${comment.id}]])"
+                      style="float: right"
+                    >
+                      등록
+                    </button>
+                  </div>
+                </div>
+                <div
+                  th:id="'replyForm-' + ${comment.id}"
+                  style="display: none; width: 100%"
+                >
+                  <div id="comment-reply-write" class="mt-2">
+                    <textarea
+                      class="form-control my-2"
+                      th:id="'commentReplyContents-' + ${comment.id}"
+                      rows="3"
+                      placeholder="댓글을 입력해주세요"
+                    ></textarea>
+                    <button
+                      class="btn btn-dark btn-sm"
+                      th:onclick="commentReplyWrite([[${comment.id}]])"
+                      style="float: right"
+                    >
+                      등록
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="d-flex mt-4"
+                  th:each="commentChild: ${comment.children}"
+                >
+                  <div class="ms-3" style="width: 95%; margin-left: 5%">
+                    <p
+                      class="fw-bold"
+                      th:text="${commentChild.commentWriter.nickname}"
+                    ></p>
+                    <p th:text="${commentChild.commentContents}"></p>
+                    <button
+                      class="btn btn-dark btn-sm"
+                      th:if="${member.username.equals(commentChild.commentWriter.username)}"
+                      th:onclick="toggleUpdateForm([[${commentChild.id}]])"
+                    >
+                      수정
+                    </button>
+                    <button
+                      class="btn btn-dark btn-sm"
+                      th:if="${member.username.equals(commentChild.commentWriter.username)}"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteCommentCheckModal"
+                      th:data-comment-id="${commentChild.id}"
+                    >
+                      삭제
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script th:inline="javascript">
+      //
+      $(function () {
+        // Comment Delete Modal
+        let commentId = '';
+        // "삭제" 버튼을 클릭할 때의 처리
+        $('#deleteCommentCheckModal').on('show.bs.modal', function (event) {
+          commentId = $(event.relatedTarget).data('comment-id');
+          console.log('Comment ID : ' + commentId);
+        });
+        // "확인" 버튼을 클릭할 때의 처리
+        $('#deleteCommentCheckModal').on('click', '.btn-primary', function () {
+          console.log('Send URI : /comment/' + commentId);
+          // 삭제 요청
+          $.ajax({
+            type: 'delete',
+            url: '/comment/' + commentId,
+            success: function (res) {
+              console.log('댓글 삭제 성공');
+              showCommentList(res);
+              $('#deleteCommentCheckModal').modal('hide');
+            },
+            error: function (err) {
+              console.error('댓글 삭제 오류:', err);
+              $('#deleteCommentCheckModal').modal('hide');
+            },
+          });
+        });
+      });
+      //
+      const commentWrite = () => {
+        const contents = document.getElementById('commentContents').value;
+        const boardId = /*[[${board.id}]]*/ 'null';
+        $.ajax({
+          type: 'post',
+          url: '/comment?boardId=' + boardId,
+          data: {
+            commentContents: contents,
+          },
+          success: function (res) {
+            console.log('요청 성공', res);
+            showCommentList(res);
+            document.getElementById('commentContents').value = '';
+          },
+          error: function (err) {
+            console.log('요청 실패', err);
+          },
+        });
+      };
+      //
+      const commentReplyWrite = (commentId) => {
+        const contents = document.getElementById(
+          'commentReplyContents-' + commentId
+        ).value;
+        const boardId = /*[[${board.id}]]*/ 'null';
+        const parentId = commentId;
+        $.ajax({
+          type: 'post',
+          url: '/comment?boardId=' + boardId,
+          data: {
+            commentContents: contents,
+            parentId: parentId,
+          },
+          success: function (res) {
+            console.log('요청 성공', res);
+            showCommentList(res);
+          },
+          error: function (err) {
+            console.log('요청 실패', err);
+          },
+        });
+      };
+      //
+      const commentUpdate = (commentId) => {
+        const contents = document.getElementById(
+          'commentUpdateContents-' + commentId
+        ).value;
+        $.ajax({
+          type: 'put',
+          url: '/comment/' + commentId,
+          data: {
+            commentContents: contents,
+          },
+          success: function (res) {
+            console.log('요청 성공', res);
+            showCommentList(res);
+          },
+          error: function (err) {
+            console.log('요청 실패', err);
+          },
+        });
+      };
+      //
+      const toggleUpdateForm = (commentId) => {
+        const form = document.getElementById('updateForm-' + commentId);
+        if (form.style.display === 'none') {
+          form.style.display = 'block';
+          console.log('수정폼 열기');
+        } else {
+          form.style.display = 'none';
+          console.log('수정폼 닫기');
+        }
+      };
+      //
+      const toggleReplyForm = (commentId) => {
+        const form = document.getElementById('replyForm-' + commentId);
+        if (form.style.display === 'none') {
+          form.style.display = 'block';
+          console.log('답글 열기');
+        } else {
+          form.style.display = 'none';
+          console.log('답글 닫기');
+        }
+      };
+      //
+      const showCommentList = (commentList) => {
+        const memberId = /*[[${member.id}]]*/ 'null';
+        let output = '';
+
+        for (let i in commentList) {
+          output += '<div class="d-flex mb-4">';
+          output += '<div class="ms-3" style="width: 100%">';
+
+          if (!commentList[i].isDeleted) {
+            output +=
+              '<p class="fw-bold">' +
+              commentList[i].commentWriter.nickname +
+              '</p>';
+          }
+
+          output += '<p>' + commentList[i].commentContents + '</p>';
+
+          if (commentList[i].commentWriter.id === memberId) {
+            if (!commentList[i].isDeleted) {
+              output +=
+                '<button class="btn btn-dark btn-sm" onclick="toggleUpdateForm(' +
+                commentList[i].id +
+                ')">수정</button>';
+              output +=
+                '<button class="btn btn-dark btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#deleteCommentCheckModal" data-comment-id="' +
+                commentList[i].id +
+                '">삭제</button>';
+            }
+            output +=
+              '<button class="btn btn-dark btn-sm" onclick="toggleReplyForm(' +
+              commentList[i].id +
+              ')">답글</button>';
+            output +=
+              '<div id="updateForm-' +
+              commentList[i].id +
+              '" style="display: none; width: 100%">';
+            output += '<div id="comment-update" class="mt-2">';
+            output +=
+              '<textarea class="form-control mb-2" id="commentUpdateContents-' +
+              commentList[i].id +
+              '" text="' +
+              commentList[i].commentContents +
+              '" row="3" placeholder="댓글을 입력해주세요"></textarea>';
+            output +=
+              '<button class="btn btn-dark btn-sm" onclick="commentUpdate(' +
+              commentList[i].id +
+              ')" style="float: right">등록</button>';
+            output += '</div>';
+            output += '</div>';
+          } else {
+            output +=
+              '<button class="btn btn-dark btn-sm" onclick="toggleReplyForm(' +
+              commentList[i].id +
+              ')">답글</button>';
+          }
+
+          output +=
+            '<div id="replyForm-' +
+            commentList[i].id +
+            '" style="display: none; width: 100%">';
+          output += '<div id="comment-reply-write" class="mt-2">';
+          output +=
+            '<textarea class="form-control my-2" id="commentReplyContents-' +
+            commentList[i].id +
+            '" rows="3" placeholder="댓글을 입력해주세요" ></textarea>';
+          output +=
+            '<button class="btn btn-dark btn-sm" onclick="commentReplyWrite(' +
+            commentList[i].id +
+            ')" style="float: right">등록</button>';
+          output += '</div>';
+          output += '</div>';
+
+          for (let j in commentList[i].children) {
+            output += '<div class="d-flex mt-4">';
+            output += '<div class="ms-3" style="width: 95%; margin-left: 5%">';
+            output +=
+              '<p class="fw-bold">' +
+              commentList[i].children[j].commentWriter.nickname +
+              '</p>';
+            output +=
+              '<p>' + commentList[i].children[j].commentContents + '</p>';
+
+            if (commentList[i].children[j].commentWriter.id === memberId) {
+              output +=
+                '<button class="btn btn-dark btn-sm me-1" onclick="toggleUpdateForm(' +
+                commentList[i].children[j].id +
+                ')">수정</button>';
+              output +=
+                '<button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#deleteCommentCheckModal" data-comment-id="' +
+                commentList[i].children[j].id +
+                '">삭제</button>';
+              output +=
+                '<div id="updateForm-' +
+                commentList[i].children[j].id +
+                '" style="display: none; width: 100%">';
+              output += '<div id="comment-update" class="mt-2">';
+              output +=
+                '<textarea class="form-control mb-2" id="commentUpdateContents-' +
+                commentList[i].children[j].id +
+                '" text="' +
+                commentList[i].children[j].commentContents +
+                '" row="3" placeholder="댓글을 입력해주세요"></textarea>';
+              output +=
+                '<button class="btn btn-dark btn-sm" onclick="commentUpdate(' +
+                commentList[i].children[j].id +
+                ')" style="float: right">등록</button>';
+              output += '</div>';
+              output += '</div>';
+            }
+
+            output += '</div>';
+            output += '</div>';
+          }
+
+          output += '</div>';
+          output += '</div>';
+        }
+
+        document.getElementById('comment-list').innerHTML = output;
+      };
+      //
+    </script>
+  </div>
+</html>

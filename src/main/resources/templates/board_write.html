@@ -1,0 +1,58 @@
+<!-- templates/layout.html -->
+<html layout:decorate="~{layout}">
+  <!-- templates/board_wirte.html -->
+  <div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+      <div>
+        <h4>글작성</h4>
+      </div>
+    </div>
+    <div class="validation-form" novalidate>
+      <form
+        th:action="@{|/board/${type}/write|}"
+        th:object="${boardDTO}"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <!-- templates/form_errors.html -->
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+        <div class="mb-3">
+          <input type="text" th:field="*{boardTitle}" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <textarea
+            class="form-control"
+            th:field="*{boardContents}"
+            id="content"
+            cols="100"
+            rows="10"
+          ></textarea>
+        </div>
+        <div class="input-group mb-3">
+          <input
+            type="file"
+            name="boardImage"
+            th:field="*{boardImage}"
+            class="form-control"
+            id="inputGroupFile02"
+            accept=".jpg, .png, .gif, .jpeg, .webp"
+            multiple
+          />
+          <label class="input-group-text" for="inputGroupFile02">이미지</label>
+        </div>
+        <div class="input-group mb-3">
+          <input
+            type="file"
+            name="boardFile"
+            th:field="*{boardFile}"
+            class="form-control"
+            id="inputGroupFile02"
+            multiple
+          />
+          <label class="input-group-text" for="inputGroupFile02">업로드</label>
+        </div>
+        <input class="btn btn-success" type="submit" value="작성완료" />
+      </form>
+    </div>
+  </div>
+</html>
